@@ -6,8 +6,10 @@ using HexasphereGrid;
 using System;
 
 
+
 public class HexasphereBuilder : MonoBehaviour
 {
+    [SerializeField] GameObject rock4Prefab;
     [SerializeField] GameObject seedHexasphere;
     [SerializeField] Slider divisionsSlider;
 
@@ -17,23 +19,59 @@ public class HexasphereBuilder : MonoBehaviour
 
     [SerializeField] float vertexHeightDamper = 5f;
 
-    private (Color, float)[] colorHeights = new (Color, float)[]
+    private (Color, float, string)[] colorHeights = new (Color, float, string)[]
     {
-        (Color.white, 0.7f),
-        (Color.gray, 0.61f),
-        (Color.green, 0.5f),
-        (Color.yellow, 0.48f),
-        (Color.blue, 0.0f)
+        (Color.white, 0.7f, "HighMountain"),
+        (Color.gray, 0.61f, "Mountain"),
+        (Color.green, 0.5f, "Grass"),
+        (Color.yellow, 0.48f, "Sand"),
+        (Color.blue, 0.0f, "Water")
 
     };
+
+    private TerrainType[] terrainTypes;  //terrain in order of height
 
     GameObject newHex;
     Hexasphere hexa;
 
     private void Awake()
     {
-        
-    }
+        terrainTypes = new TerrainType[]
+        {
+             new TerrainType
+             {
+                 name = "Mountain",
+                 prefab = rock4Prefab,
+                 height = 0.6f,
+                 color = Color.gray,
+
+             },
+             new TerrainType
+             {
+                 name = "Mountain",
+                 prefab = rock4Prefab,
+                 height = 0.6f,
+                 color = Color.gray,
+
+             },
+             new TerrainType
+             {
+                 name = "Mountain",
+                 prefab = rock4Prefab,
+                 height = 0.6f,
+                 color = Color.gray,
+
+             },
+             new TerrainType
+             {
+                 name = "Mountain",
+                 prefab = rock4Prefab,
+                 height = 0.6f,
+                 color = Color.gray,
+
+             }
+        };
+}
 
     private void Start()
     {
@@ -74,13 +112,15 @@ public class HexasphereBuilder : MonoBehaviour
 
     public void SmartHeightsStart()
     {
-        StartCoroutine(SmartHeights());
+        SmartHeights();
     }
 
-    private IEnumerator SmartHeights()
+    private void SmartHeights()
     {
         if (hexa != null)
         {
+           // List<Vector3> processedTileVertices = new List<Vector3>();
+
             Tile[] arrayOfTiles = hexa.tiles;
             foreach (Tile tile in arrayOfTiles)
             {
@@ -100,9 +140,7 @@ public class HexasphereBuilder : MonoBehaviour
                         numOfGeneratedNeighbors++;
                         neighborHeights[i] = _height;
                     }
-                    //neighborHeights[i] = tile.extrudeAmount;
-                    //Debug.Log("neighbor height: " + neigh);
-                    //neighborHeightTotal += neighborHeights[i];
+
                 }
 
                 if (numOfGeneratedNeighbors > 0)
@@ -114,10 +152,10 @@ public class HexasphereBuilder : MonoBehaviour
                 Debug.Log("average neighbor height: " + averageNeighborHeight);
                 Debug.Log("new random height: " + randomHeight);
                 float weightedNewHeight = ((numOfGeneratedNeighbors * (averageNeighborHeight * neighborHeightWeight)) + randomHeight) / ((numOfGeneratedNeighbors * neighborHeightWeight) + 1);
-                Debug.Log("smart height: " + weightedNewHeight);
+                Debug.Log("smart* height: " + weightedNewHeight);
                 hexa.SetTileExtrudeAmount(tile.index, weightedNewHeight);
 
-                yield return new WaitForSeconds(generationSpeed);
+               // yield return new WaitForSeconds(generationSpeed);
             }
         }
     }
@@ -153,7 +191,7 @@ public class HexasphereBuilder : MonoBehaviour
     private Color HeightToColor(float height)
     {
         Color newColor = Color.magenta;
-        foreach ((Color, float) color in colorHeights)
+        foreach ((Color, float, string) color in colorHeights)
         {
             if (height >= color.Item2)
             {
@@ -165,6 +203,63 @@ public class HexasphereBuilder : MonoBehaviour
         return newColor;
     }
 
+    public void TagAllByHeightAndGenerateProps()
+    {
+        Tile[] arrayOfTiles = hexa.tiles;
+        foreach (Tile tile in arrayOfTiles)
+        {
+            TagTileByHeight(tile);
+            BuildTileProp(tile);
+        }
+    }
+
+    private void BuildTileProp(Tile tile)
+    {
+        TerrainType newTerrain = new TerrainType() ;
+        foreach (TerrainType _terrain in terrainTypes)
+        {
+            if (_terrain.name == tile.tag)
+            {
+                newTerrain = _terrain;
+                break;
+            }
+        }
+
+        if (newTerrain.prefab != null)
+            {
+            float _height = tile.extrudeAmount;
+            //hexa.SetTileExtrudeAmount(tile.index, 0.2f);
+
+            GameObject newTileProp = Instantiate(newTerrain.prefab);
+            hexa.ParentAndAlignToTile(newTileProp, tile.index);
+            newTileProp.transform.Rotate(-90f, 0f, 0f, Space.Self);
+            newTileProp.transform.Rotate(0f, UnityEngine.Random.Range(0f, 360f), 0f);
+            newTileProp.transform.localScale *= 2;
+            }
+    }
+
+    private void TagTileByHeight(Tile tile)  //Array of terrainTypes must be in order of highest to lowest
+    {
+        //string tag = "null";
+        foreach (TerrainType terrain in terrainTypes)
+        {
+            if (terrain.height <= tile.extrudeAmount)
+            {
+                tile.tag = terrain.name;
+                Debug.Log("Tagging as " + terrain.name);
+                break;
+            }
+
+        }
+    }
+
+  //  private void ProcessTile(Tile tile)
+  //  {
+  //         // float height = hexa.GetTileExtrudeAmount(tile.index);
+  //         // Color newColor = HeightToColor(height);
+  //         // hexa.SetTileColor(tile.index, newColor);
+  //  }
+
     public void ColorHeights()
     {
         Tile[] arrayOfTiles = hexa.tiles;
@@ -174,6 +269,21 @@ public class HexasphereBuilder : MonoBehaviour
             float height = hexa.GetTileExtrudeAmount(tile.index);
             Color newColor = HeightToColor(height);
             hexa.SetTileColor(tile.index, newColor);
+        }
+    }
+
+    public void ApplyProps()
+    {
+        Tile[] arrayOfTiles = hexa.tiles;
+
+        foreach (Tile tile in arrayOfTiles)
+        {
+            if (tile.tag == "Mountain")
+            {
+
+            }
+            
+
         }
     }
 
@@ -254,5 +364,14 @@ public class HexasphereBuilder : MonoBehaviour
     }
 
     //void ondra
+    
+}
 
+public class TerrainType
+{
+    public string name;
+    public GameObject prefab;
+    public Material baseMaterial;
+    public Color color;
+    public float height;
 }
