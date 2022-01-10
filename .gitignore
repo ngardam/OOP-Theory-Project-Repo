@@ -2993,3 +2993,17 @@ OOP Theory Project/Logs/shadercompiler-UnityShaderCompiler.exe3.log
 OOP Theory Project/Logs/shadercompiler-UnityShaderCompiler.exe9.log
 OOP Theory Project/UserSettings/EditorUserSettings.asset
 *.log
+*.meta
+*.png
+*.mat
+*.asset
+*.terrainlayer
+*.log
+
+*.exr
+OOP Theory Project/Assets/LowlyPoly/Free Stylized Textures/Scene/Free_Stylized_Textures.unity
+OOP Theory Project/Assets/Blink/Art/Textures/Demo/StylizedFREETexturesDEMO.unity
+OOP Theory Project/Assets/Stylize Water Texture/Scene/Stylize Water.unity
+OOP Theory Project/Assets/Stylize Water Texture/Scene/Stylized Grass Texture.unity
+OOP Theory Project/ProjectSettings/Packages/com.unity.probuilder/Settings.json
+OOP Theory Project/ProjectSettings/SceneTemplateSettings.json
