@@ -21,7 +21,7 @@ public class HexsphereInteraction : MonoBehaviour
     void TileClicked(int tileIndex)
     {
         Tile tile = hexa.tiles[tileIndex];
-        Debug.Log("Tile Clicked");
+        Debug.Log("Tile Clicked: " + tileIndex);
         tileInfoPanel.DisplayTileInfo(hexa, tile);
     }
 }

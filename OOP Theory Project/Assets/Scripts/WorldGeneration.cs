@@ -34,6 +34,8 @@ public class WorldGeneration : MonoBehaviour
         specs.sandLevel = 0.45f;
         specs.grassLevel = 0.65f;
 
+        specs.numberOfStarterVillagers = 6;
+
         specs.bottomTopLevel = new float[3]
         {
             0.40f,
@@ -58,6 +60,7 @@ public class WorldGeneration : MonoBehaviour
         newHexa.transform.localScale *= specs.scale;
         hexa.numDivisions = specs.divisions;
         newHexa.GetComponent<SphereCollider>().radius = 0.5f; // shrink radius from 0.55f so that entities on surface can be selected
+        newHexa.GetComponent<HexasphereLogistics>().InitializeHexasphereLogistics();
 
 
         GetComponent<TerrainGeneration>().GenerateTerrain(hexa, specs);
@@ -68,7 +71,13 @@ public class WorldGeneration : MonoBehaviour
 
         int starterVillageTileIndex = CreateRandomVillage(hexa);
 
-        AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
+        for (int i = 0; i < specs.numberOfStarterVillagers; i++)
+        {
+            AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
+        }
+
+
+        CameraController cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
         hexa.FlyTo(starterVillageTileIndex, 5f);
 
@@ -94,7 +103,7 @@ public class WorldGeneration : MonoBehaviour
             {
                 village = PropPlacement.CreateProp(hexa, randomTileIndex, villagePrefab);
                 Tile _villageTile = hexa.tiles[randomTileIndex];
-
+                village.GetComponent<Residential>().InitializeBuilding(hexa, randomTileIndex);
                 _villageTile.gameObject = village;
                 _villageTile.contents = "Village";
 

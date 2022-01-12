@@ -31,11 +31,22 @@ public class Classes : MonoBehaviour
 
         public float[] bottomTopLevel = new float[3]; //heights between bottom[0] and top[1] will be set to level[2]
 
+        public int numberOfStarterVillagers;
+
     }
 
     public class BuildingType
     {
 
+    }
+
+    public class TileLogisticsRequest
+    {
+        public string type;
+        public int qty;
+        public int requesterIndex;
+        public int priority = 0;
+        public int active = 0; // number of requests actively being filled
     }
 
 

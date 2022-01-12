@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using HexasphereGrid;
 
-public class Plant : MonoBehaviour
+public abstract class Plant : MonoBehaviour
 {
     protected Tile parentTile;
 
@@ -20,7 +20,11 @@ public class Plant : MonoBehaviour
     public void SetParentTile(Tile tile)
     {
         parentTile = tile;
+        tile.itemRemoved.AddListener(ItemRemoved);
         //Debug.Log("Parent tile set");
     }
+
+    protected abstract void ItemRemoved();
+
 
 }

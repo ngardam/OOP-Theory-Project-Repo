@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HexasphereGrid;
+using UnityEngine.EventSystems;
 
 
 public class Animal : MonoBehaviour
@@ -17,7 +18,9 @@ public class Animal : MonoBehaviour
 
     public int health { get; private set; } = 100;
 
-    public int hunger { get; private set; } = 65;
+    public int hunger { get; private set; } = 60;
+
+    private int foodValue = 10;
 
     public int sleep { get; private set; } = 100;
 
@@ -28,8 +31,9 @@ public class Animal : MonoBehaviour
 
     private float tirednessRate = 2.0f; //number of seconds to lower sleep by one
 
-    protected Vector3 destinationVector;
+    //protected Vector3 destinationVector;
     protected bool isTraveling;
+    protected bool hasTask = false;
 
     private float reachedDestinationDistance = 0.1f;
 
@@ -46,27 +50,32 @@ public class Animal : MonoBehaviour
 
     protected void Update()
     {
-        if(isTraveling)
-        {
-            MoveTowardsDestination();
-        }
+
     }
 
-    private void MoveTowardsDestination()
-    {
-        //Vector3 direction = (destinationVector - transform.position).normalized;
-        transform.LookAt(destinationVector, Vector3.back);
-        // transform.
 
-        Vector3 newPos = Vector3.MoveTowards(transform.position, destinationVector, speed * Time.deltaTime);
+
+    protected void MoveTowards(Vector3 destination)
+    {
+        transform.LookAt(destination, Vector3.back);
+        Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
 
         transform.position = newPos;
 
-        if (Vector3.Distance(newPos, destinationVector) <= reachedDestinationDistance)
+    }
+
+    protected void EatFromTile(Tile tile)
+    {
+        if (tile.CheckForItem("Food"))
         {
-            isTraveling = false;
+            tile.RemoveItem("Food");
+            hunger += foodValue;
         }
-        //transform.Translate(direction * speed * Time.deltaTime);
+    }
+
+    protected bool AtLocation(Vector3 Vector3)
+    {
+        return (Vector3.Distance(transform.position, Vector3) <= reachedDestinationDistance);
     }
 
     IEnumerator metabolism()
@@ -99,7 +108,12 @@ public class Animal : MonoBehaviour
 
     private void OnMouseDown()
     {
-        entityInfoPanel.LoadEntity(gameObject);
-        Debug.Log("Entity Clicked");
+        bool mouseOverUI = EventSystem.current.IsPointerOverGameObject();
+
+        if (!mouseOverUI)
+        {
+            entityInfoPanel.LoadEntity(gameObject);
+            Debug.Log("Entity Clicked");
+        }
     }
 }

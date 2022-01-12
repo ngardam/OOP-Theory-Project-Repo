@@ -5,7 +5,7 @@ using HexasphereGrid;
 
 public class Berries : Plant
 {
-    [SerializeField] InventoryManager inventoryManager;
+    //[SerializeField] InventoryManager inventoryManager;
 
     [SerializeField] GameObject[] ripeBerries;
 
@@ -26,6 +26,8 @@ public class Berries : Plant
     {
         //inventory = parentTile.inventory;
         //inventoryManager = FindObjectOfType<InventoryManager>();
+
+
 
         DeactivateBerries();
 
@@ -80,7 +82,25 @@ public class Berries : Plant
         {
 
             berry.SetActive(true);
-            parentTile.AddItem("Berry");
+            parentTile.AddItem("Food");
+        }
+    }
+
+    protected override void ItemRemoved()
+    {
+        //Debug.Log("Item Removed Fired");
+        int newQty = parentTile.inventory["Food"];
+
+        for (int i = 0; i < ripeBerries.Length; i++)
+        {
+            if (i < newQty)
+            {
+                ripeBerries[i].SetActive(true);
+            }
+            else
+            {
+                ripeBerries[i].SetActive(false);
+            }
         }
     }
 }
