@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: rpgpp_lt_tree_pine_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1369031296425274, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4252784401376168, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -69,7 +73,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_MotionVectors
@@ -77,7 +81,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_LightProbeUsage
@@ -194,6 +198,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: rpgpp_lt_tree_pine_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1369031296425274, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4252784401376168, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -252,7 +260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_MotionVectors
@@ -260,7 +268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_LightProbeUsage
@@ -282,6 +290,10 @@ PrefabInstance:
     - target: {fileID: 1369031296425274, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_Name
       value: rpgpp_lt_tree_pine_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1369031296425274, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4252784401376168, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_RootOrder
@@ -341,7 +353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_CastShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_MotionVectors
@@ -349,7 +361,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_ReceiveShadows
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23009263249696568, guid: 22a3fd8d3e59a1149bdcd775c0e87241, type: 3}
       propertyPath: m_LightProbeUsage

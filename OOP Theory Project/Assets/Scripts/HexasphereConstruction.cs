@@ -51,7 +51,7 @@ public class HexasphereConstruction : MonoBehaviour
 
             float _height = PerlinNoise3D.get3DPerlinNoise(tilePos + randomPerlinPosition, perlinFrequency);
 
-            _height = NormalizePerlin(_height); //attempting to normalize height to between 0 and 1
+            _height = Utilities.NormalizePerlin(_height); //attempting to normalize height to between 0 and 1
 
             hexa.SetTileExtrudeAmount(tile.index, _height);
 
@@ -97,7 +97,7 @@ public class HexasphereConstruction : MonoBehaviour
 
                 foreach (Vector3 vertice in verticeArray)
                 {
-                    float newHeight = NormalizePerlin(PerlinNoise3D.get3DPerlinNoise((vertice + randomPerlinPosition), perlinFrequency));
+                    float newHeight = Utilities.NormalizePerlin(PerlinNoise3D.get3DPerlinNoise((vertice + randomPerlinPosition), perlinFrequency));
 
                     newHeight *= extrudeMultiplier;
 
@@ -111,10 +111,10 @@ public class HexasphereConstruction : MonoBehaviour
         }
     }
 
-    public float NormalizePerlin(float rawPerlin)
-    {
-        return (rawPerlin + 1) / 2;
-    }
+  //  public float NormalizePerlin(float rawPerlin)
+  //  {
+  //      return (rawPerlin + 1) / 2;
+  //  }
 
     public void FlattenPlayArea()
     {
