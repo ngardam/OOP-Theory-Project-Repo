@@ -2,21 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using HexasphereGrid;
+using static Classes;
 
 
 
 public class Person : Animal
 {
 
-    //[SerializeField] GameObject chaseObject;
+    //private TileLogisticsRequest activeLogisticsJob = new TileLogisticsRequest();
 
- //  void Update()
- //  {
- //      if (mode == "Idle")
- //      {
- //
- //      }
- //  }
+    private Dictionary<string, int> inventory = new Dictionary<string, int>();
+
+    public HexasphereLogistics hexaLogistics;
+
 
     protected override void SeekFood()
     {
@@ -46,10 +44,6 @@ public class Person : Animal
         int numberOfSteps = pathfindingTileIndexes.Length;
         Vector3 destination;
 
-
-
-
-
         while(isTraveling)
         {
             destination = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
@@ -74,14 +68,12 @@ public class Person : Animal
             yield return null;
 
         }
-        //destination reached
-        Debug.Log("Final destination reached");
+
 
         EatFromTile(tile);
         Debug.Log("Yum");
         hasTask = false;
-
-        
+   
 
     }
 
@@ -124,13 +116,16 @@ public class Person : Animal
 
         //Debug.Log("My tile: " + myTileIndex);
 
-        for (int i = 1; i <= searchLimit; i++)  //Should add check to current tile before this
+        if(ContainsFood(myTileIndex))
+        {
+            return parentHexa.tiles[myTileIndex];
+        }
+
+
+        for (int i = 1; i <= searchLimit; i++)  
         {
 
-            if(ContainsFood(myTileIndex))
-            {
-                return parentHexa.tiles[myTileIndex];
-            }
+
             List<int> tileIndexList = parentHexa.GetTilesWithinSteps(myTileIndex, i, i);
 
             Debug.Log("number of tiles with step " + i + ": " + tileIndexList.Count);
@@ -166,6 +161,131 @@ public class Person : Animal
         }
 
         return false;
+    }
+
+    public void AssignWorkOrder(TileLogisticsRequest resourceRequest)
+    {
+        hasTask = true;
+        StartCoroutine(FollowWorkOrder(resourceRequest));
+    }
+
+    IEnumerator FollowWorkOrder(TileLogisticsRequest logisticsOrder)
+    {
+
+        Debug.Log("Work order began: " + logisticsOrder.type);
+
+        int[] pathfindingTileIndexes = GeneratePathfindingTileIndices(parentHexa.tiles[logisticsOrder.supplierIndex]);
+        int step = 0;
+        int numberOfSteps = pathfindingTileIndexes.Length;
+        Tile interactTile;
+        Vector3 destinationVector;
+        isTraveling = true;
+
+        while (isTraveling)
+        {
+            destinationVector = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
+
+            MoveTowards(destinationVector);
+
+            if (AtLocation(destinationVector))
+            {
+                step++;
+
+                if (step == numberOfSteps)
+                {
+                    isTraveling = false;
+                }
+
+            }
+            yield return null;
+        }
+
+        // we have reached the supplier tile
+        interactTile = parentHexa.tiles[logisticsOrder.supplierIndex];
+
+        PickUpFromSupplier(interactTile, logisticsOrder.type, 1);       //People only grab 1 at a time.. if need to grab more, will need to compare carry capacity with requested qty
+
+        pathfindingTileIndexes = GeneratePathfindingTileIndices(parentHexa.tiles[logisticsOrder.requesterIndex]);
+        step = 0;
+        numberOfSteps = pathfindingTileIndexes.Length;
+        isTraveling = true;
+
+        while (isTraveling)
+        {
+            //TravelAlongPath(pathfindingTileIndexes);
+            destinationVector = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
+
+            MoveTowards(destinationVector);
+
+            if (AtLocation(destinationVector))
+            {
+                step++;
+
+                if (step == numberOfSteps)
+                {
+                    isTraveling = false;
+                }
+
+            }
+            yield return null;
+        }
+
+        //we have arrive at the requester tile
+
+        interactTile = parentHexa.tiles[logisticsOrder.requesterIndex];
+
+        DropOffAtRequester(interactTile, logisticsOrder.type, 1);
+
+        hasTask = false;
+
+
+
+
+    }
+
+ //   private void TravelAlongPath(List<int> pathfindingTileIndexes)
+ //   {
+ //
+ //   }
+
+    private void PickUpFromSupplier(Tile supplierTile, string type, int qty)
+    {
+        supplierTile.PickUpReservedItem(type, qty);
+        AddToInventory(type, qty);
+
+    }
+
+    private void DropOffAtRequester(Tile requesterTile, string type, int qty)
+    {
+        requesterTile.AddItem(type, qty);
+        SubtractFromInventory(type, qty);
+        hexaLogistics.ConfirmDelivery(requesterTile.index, type, qty);
+    }
+
+
+
+    private void AddToInventory(string type, int qty)
+    {
+        if (inventory.ContainsKey(type))
+        {
+            inventory[type] += qty;
+        }
+        else
+        {
+            inventory.Add(type, qty);
+        }
+    }
+
+    private void SubtractFromInventory(string type, int qty)
+    {
+        if (inventory.ContainsKey(type))
+        {
+            inventory[type] -= qty;
+        }
+        else
+        {
+            Debug.Log("Worker Inventory Error");
+        }
     }
 
 }

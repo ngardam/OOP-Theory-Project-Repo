@@ -33,7 +33,7 @@ public class Animal : MonoBehaviour
 
     //protected Vector3 destinationVector;
     protected bool isTraveling;
-    protected bool hasTask = false;
+    public bool hasTask { get; protected set; } = false;
 
     private float reachedDestinationDistance = 0.1f;
 

@@ -16,6 +16,7 @@ namespace HexasphereGrid
         public UnityEvent itemRemoved = new UnityEvent();
 
         public Dictionary<string, int> inventory { get; private set; } = new Dictionary<string, int>() ;
+        public Dictionary<string, int> inventoryPendingPickup { get; private set; } = new Dictionary<string, int>();
 
         public void AddItem(string type, int qty)
         {
@@ -63,7 +64,7 @@ namespace HexasphereGrid
                     return true;
                 }
             }
-            Debug.Log("Item not found");
+            //Debug.Log("Item not found");
             return false;
         }
 
@@ -84,7 +85,40 @@ namespace HexasphereGrid
             }
         }
 
+        public void SubmitPickupRequest(string type, int qty)
+        {
+            if (inventoryPendingPickup.ContainsKey(type))
+            {
+                inventoryPendingPickup[type] += qty;
+            }
+            else
+            {
+                inventoryPendingPickup.Add(type, qty);
+            }
+        }
 
+        public void PickUpReservedItem(string type, int qty)
+        {
+            Debug.Log("Attempting to pick up " + type + " from tile " + contents);
+            RemoveItem(type, qty);
+            inventoryPendingPickup[type]--;
+        }
+        public void PickUpReservedItem(string type)
+        {
+            PickUpReservedItem(type, 1);
+        }
+
+        public int HowManyPendingPickup(string type)
+        {
+            if (inventoryPendingPickup.ContainsKey(type))
+            {
+                return inventoryPendingPickup[type];
+            }
+            else
+            {
+                return 0;
+            }
+        }
 
     }
 }

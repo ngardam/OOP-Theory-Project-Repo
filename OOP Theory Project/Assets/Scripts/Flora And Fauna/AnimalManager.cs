@@ -15,6 +15,10 @@ public class AnimalManager : MonoBehaviour
         GameObject newAnimal = PropPlacement.CreateProp(hexa, tileIndex, prefab);
         newAnimal.transform.localScale *= animalScale;
         newAnimal.GetComponent<Animal>().parentHexa = hexa;
+        if (newAnimal.TryGetComponent<Person>(out Person person))
+            {
+            person.hexaLogistics = person.GetComponentInParent<HexasphereLogistics>();
+        }
         return newAnimal;
 
     }
