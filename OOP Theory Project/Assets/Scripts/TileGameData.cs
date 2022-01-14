@@ -13,7 +13,7 @@ namespace HexasphereGrid
         public string contents;
         public float generationHeight;
 
-        public UnityEvent itemRemoved = new UnityEvent();
+        public UnityEvent inventoryChanged = new UnityEvent();
 
         public Dictionary<string, int> inventory { get; private set; } = new Dictionary<string, int>() ;
         public Dictionary<string, int> inventoryPendingPickup { get; private set; } = new Dictionary<string, int>();
@@ -28,6 +28,8 @@ namespace HexasphereGrid
             {
                 inventory.Add(type, qty);
             }
+
+            inventoryChanged.Invoke();
         }
 
         public void AddItem(string type)
@@ -45,7 +47,7 @@ namespace HexasphereGrid
                     inventory[type] -= qty;
                 }
 
-                itemRemoved.Invoke();
+                inventoryChanged.Invoke();
             }
         }
 

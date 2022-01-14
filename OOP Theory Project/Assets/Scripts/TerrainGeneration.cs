@@ -37,9 +37,11 @@ public class TerrainGeneration : MonoBehaviour
 
             SetTerrainTagByHeight(tile, specs);
 
-            LevelPlayableArea(specs);
+
 
         }
+
+        LevelAndDesignatePlayableArea(specs);
 
     }
 
@@ -81,7 +83,7 @@ public class TerrainGeneration : MonoBehaviour
         
     }
 
-    private void LevelPlayableArea(WorldGenSpecs specs)
+    private void LevelAndDesignatePlayableArea(WorldGenSpecs specs)
     {
         foreach (Tile tile in arrayOfTiles)
         {
@@ -93,6 +95,10 @@ public class TerrainGeneration : MonoBehaviour
             if (height > bottom && height < top)
             {
                 targetHexa.SetTileExtrudeAmount(tile.index, level);
+            } 
+            else
+            {
+               targetHexa.SetTileCanCross(tile.index, false);  //this breaks it for some reason
             }
         }
     }

@@ -44,7 +44,7 @@ public class TileInfoPanel : MonoBehaviour
 
     private void WriteTileInfo(Tile tile)
     {
-        string newText = "Index: " + tile.index + "\nTerrain Type: " + tile.terrain + "\nContents: " + tile.contents;
+        string newText = "Index: " + tile.index + "\nCanCross: " + tile.canCross + "\nTerrain Type: " + tile.terrain + "\nContents: " + tile.contents;
 
         if (tile.contents == "Berries")
         {

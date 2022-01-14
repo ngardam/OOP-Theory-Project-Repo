@@ -17,17 +17,22 @@ public abstract class Building : MonoBehaviour
 
     public abstract void InitializeBuilding(Hexasphere _hexa, int _tileIndex);
 
-    protected IEnumerator EmitLogisticsRequests()
+    protected virtual void InventoryChanged()
+    {
+        EmitLogisticsRequests();
+    }
+
+    protected void EmitLogisticsRequests()
     {
 
-        Debug.Log("Begin emission");
+        Debug.Log("Emitting");
         int qtyOnHand;
         int qtyWanted;
         int qtyRequested;
 
-        while (isActive)
-        {
-            yield return new WaitForSeconds(logisticsPulseFrequency);
+          
+        
+            
             foreach(KeyValuePair<string, int> entry in resourceRequests)
             {
                 qtyOnHand = parentTile.HowMany(entry.Key);
@@ -38,7 +43,7 @@ public abstract class Building : MonoBehaviour
 
             }
 
-        }
+        
     }
 
     // Start is called before the first frame update

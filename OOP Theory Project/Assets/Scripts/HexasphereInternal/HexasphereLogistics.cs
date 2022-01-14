@@ -34,7 +34,25 @@ public class HexasphereLogistics : MonoBehaviour
         while (isRunning)
         {
             yield return new WaitForSeconds(logisticsRefreshRate);
+            CleanUpList();
             IssueOrders();
+        }
+    }
+
+    private void CleanUpList()
+    {
+        for (int i = resourceRequests.Count; i > 0 ; i--)
+        {
+            if (resourceRequests[i-1].qty == 0)
+            {
+                resourceRequests.Remove(resourceRequests[i-1]);
+                Debug.Log("request removed from logistics list");
+            }
+            else if (resourceRequests[i-1].qty < 0)
+            {
+                Debug.LogWarning("Error: negative request");
+
+            }
         }
     }
 
@@ -70,7 +88,7 @@ public class HexasphereLogistics : MonoBehaviour
             }
             else
             {
-                Debug.Log("All pending");
+                //Debug.Log("All pending");
             }
 
         }
