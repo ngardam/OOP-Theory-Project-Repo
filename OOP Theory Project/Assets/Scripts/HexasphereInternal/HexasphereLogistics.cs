@@ -19,12 +19,24 @@ public class HexasphereLogistics : MonoBehaviour
 
     private bool isRunning = false;
 
+    public Dictionary<string, int>[] pendingPickupArray { get; private set; }
+
+    private int pickupQty = 1; //for now, only 1 item can be picked up at a time
+
 
     public void InitializeHexasphereLogistics()
     {
         hexa = GetComponent<Hexasphere>();
         hexPop = GetComponent<HexaspherePopulation>();
+        pendingPickupArray = new Dictionary<string, int>[hexa.tiles.Length];
+
+        for (int i = 0; i < pendingPickupArray.Length; i++)
+        {
+            pendingPickupArray[i] = new Dictionary<string, int>() { };
+        }
+
         isRunning = true;
+
 
         StartCoroutine(Logistics());
     }
@@ -75,10 +87,18 @@ public class HexasphereLogistics : MonoBehaviour
 
                     if (nearestIdleWorker != null)
                     {
-                        request.supplierIndex = supplierIndex;
-                        hexa.tiles[supplierIndex].SubmitPickupRequest(request.type, 1);
+                        TileLogisticsRequest NewWorkOrder = new TileLogisticsRequest();
+                        NewWorkOrder.supplierIndex = supplierIndex;
+                        NewWorkOrder.requesterIndex = request.requesterIndex;
+                        NewWorkOrder.type = request.type;
+                        //NewWorkOrder.supplierIndex = supplierIndex;
+                        NewWorkOrder.qty = pickupQty;
+
+                        //AddToPendingPickupArray(request.type, pickupQty, request.supplierIndex);
+                        
+
                         request.active++;
-                        nearestIdleWorker.GetComponent<Person>().AssignWorkOrder(request);
+                        nearestIdleWorker.GetComponent<Person>().AssignWorkOrder(NewWorkOrder);  //hmmmm. what's going on here? Need to create new request so changing it doesn't affect active work orders
                     }
                 }
                 else
@@ -88,12 +108,50 @@ public class HexasphereLogistics : MonoBehaviour
             }
             else
             {
-                //Debug.Log("All pending");
+                Debug.Log("All pending");
             }
 
         }
 
 
+    }
+
+    public void AddToPendingPickupArray(string type, int qty, int supplierIndex)
+    {
+        Dictionary<string, int> pendingPickupDict = pendingPickupArray[supplierIndex];
+
+        if (pendingPickupDict.ContainsKey(type))
+        {
+            pendingPickupDict[type] += qty;
+        }
+        else
+        {
+            pendingPickupDict.Add(type, qty);
+        }
+        
+    }
+
+    public void RemoveFromPendingPickupArray(string type, int qty, int supplierIndex)
+    {
+        Dictionary<string, int> selectedDict = pendingPickupArray[supplierIndex];
+
+        if (selectedDict.ContainsKey(type))
+        {
+            selectedDict[type] -= qty;
+        }
+    }
+
+    public int HowManyPendingPickups(string type, int tileIndex)
+    {
+        
+        if (pendingPickupArray[tileIndex].ContainsKey(type))
+        {
+            return pendingPickupArray[tileIndex][type];
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void ConfirmDelivery(int tileIndex, string type, int qty)
@@ -153,12 +211,20 @@ public class HexasphereLogistics : MonoBehaviour
                 if (tile.CheckForItem(type))
                 {
                     int qty = tile.HowMany(type);
-                    int reservedQty = tile.HowManyPendingPickup(type);
+                    int reservedQty = 0;
+
+                    if (pendingPickupArray[tileIndex].ContainsKey(type))
+                    {
+                        reservedQty = pendingPickupArray[tileIndex][type];
+                    }
+                    
 
                     if (reservedQty < qty)
                     {
                         return tile.index;
+
                     }
+                    
                 }
 
 
@@ -185,22 +251,22 @@ public class HexasphereLogistics : MonoBehaviour
 
     private void ProcessNewRequest(TileLogisticsRequest request)
     {
-        //TileLogisticsRequest preexistingRequest = resourceRequests.Find(x => x.requesterIndex == request.requesterIndex && x.type == request.type); 
+
 
         int requestIndex = resourceRequests.FindIndex(x => x.requesterIndex == request.requesterIndex && x.type == request.type);  //Is this tile already requesting these resources?
-        //bool doesexist = resourceRequests.Find(x => x.requesterIndex == request.requesterIndex && x.type == request.type);
+
         if (requestIndex == -1)
         {
-            Debug.Log("no request found, creating new");
+
             resourceRequests.Add(request);
         }
         else
         {
-           // Debug.Log("problem here?");
+
             if (resourceRequests[requestIndex].qty != request.qty)
             {
                 resourceRequests[requestIndex].qty = request.qty;
-                Debug.Log("Updating request quantity: " + request.qty);
+
             }
             
         }

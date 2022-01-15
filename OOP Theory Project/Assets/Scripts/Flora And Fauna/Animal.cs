@@ -10,7 +10,7 @@ public class Animal : MonoBehaviour
 
     [SerializeField] EntityInfoPanel entityInfoPanel;
 
-    protected float speed = 1f;
+    protected float speed = 0.5f;
 
     public string mode { get; private set; } = "Idle";  //what animal is doing
 
@@ -71,6 +71,10 @@ public class Animal : MonoBehaviour
             tile.RemoveItem("Food");
             hunger += foodValue;
         }
+        else
+        {
+            Debug.Log("error eating from tile");
+        }
     }
 
     protected bool AtLocation(Vector3 Vector3)
@@ -85,9 +89,9 @@ public class Animal : MonoBehaviour
             yield return new WaitForSeconds(metabolismRate);
             hunger--;
 
-            if (hunger < seekFoodThreshold)
+            if (hunger < seekFoodThreshold && !hasTask)
             {
-                SeekFood();
+                SeekFood();  //turning off to track down logistics bug
             }
             if (hunger <= 0)
             {

@@ -15,6 +15,7 @@ public class TileInfoPanel : MonoBehaviour
 
     private Tile targetTile;
     private Hexasphere targetHexasphere;
+    private HexasphereLogistics hexaLogistics;
 
     private Text infoText;
 
@@ -24,11 +25,14 @@ public class TileInfoPanel : MonoBehaviour
         infoText = GetComponentInChildren<Text>();
     }
 
+    
+
 
     public void DisplayTileInfo(Hexasphere hexa, Tile tile)
     {
         targetTile = tile;
         targetHexasphere = hexa;
+        hexaLogistics = hexa.GetComponentInParent<HexasphereLogistics>();
 
         StartCoroutine(RefreshTileInfo());
     }
@@ -65,9 +69,26 @@ public class TileInfoPanel : MonoBehaviour
 
         newText += PrintLatLong(targetHexasphere, tile.index);
 
+        newText += PrintLogisticsInfo(hexaLogistics, tile.index);
+
         infoText.text = newText;
     }
 
+    private string PrintLogisticsInfo(HexasphereLogistics logistics, int tileIndex)
+    {
+        string text = "Logistics: \n";
+        if (logistics.pendingPickupArray[tileIndex].Count != 0)
+        {
+            Dictionary<string, int> dict = logistics.pendingPickupArray[tileIndex];
+            text += "\n active requests:";
+            foreach (KeyValuePair<string, int> entry in dict)
+            {
+                text += "\ntype: " + entry.Key + " qty: " + entry.Value;
+            }
+        }
+
+        return text;
+    }
     private string PrintLatLong(Hexasphere hexa, int tileIndex)
     {
         float latitude = hexa.GetTileLatLon(tileIndex).x;

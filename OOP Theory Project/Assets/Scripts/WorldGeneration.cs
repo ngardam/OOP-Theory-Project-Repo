@@ -34,7 +34,7 @@ public class WorldGeneration : MonoBehaviour
         specs.sandLevel = 0.45f;
         specs.grassLevel = 0.65f;
 
-        specs.numberOfStarterVillagers = 6;
+        specs.numberOfStarterVillagers = 2;
 
         specs.bottomTopLevel = new float[3]
         {
@@ -83,7 +83,7 @@ public class WorldGeneration : MonoBehaviour
 
         CameraController cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-        hexa.FlyTo(starterVillageTileIndex, 5f);
+        hexa.FlyTo(starterVillageTileIndex, 1f);
 
 
 

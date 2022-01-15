@@ -15,6 +15,8 @@ public class Person : Animal
 
     public HexasphereLogistics hexaLogistics;
 
+    private int pickupQty = 1; //pickup qty is always 1 right now
+
 
     protected override void SeekFood()
     {
@@ -27,6 +29,7 @@ public class Person : Animal
             }
             else
             {
+               // hexaLogistics.AddToPendingPickupArray("Food", pickupQty, foodSourceTile.index);
                 StartCoroutine(GoToFoodAndEatFromTileInventory(foodSourceTile));
                 hasTask = true;
 
@@ -36,6 +39,7 @@ public class Person : Animal
 
     IEnumerator GoToFoodAndEatFromTileInventory(Tile tile)
     {
+        hexaLogistics.AddToPendingPickupArray("Food", pickupQty, tile.index);
         Debug.Log("Foodseek corouting started:");
         int[] pathfindingTileIndexes = GeneratePathfindingTileIndices(tile);
 
@@ -71,6 +75,7 @@ public class Person : Animal
 
 
         EatFromTile(tile);
+        hexaLogistics.RemoveFromPendingPickupArray("Food", pickupQty, tile.index);
         Debug.Log("Yum");
         hasTask = false;
    
@@ -116,7 +121,7 @@ public class Person : Animal
 
         //Debug.Log("My tile: " + myTileIndex);
 
-        if(ContainsFood(myTileIndex))
+        if(ContainsUnreservedFood(myTileIndex))
         {
             return parentHexa.tiles[myTileIndex];
         }
@@ -134,7 +139,7 @@ public class Person : Animal
             {
                 Tile tile = parentHexa.tiles[tileIndex];
 
-                if (ContainsFood(tileIndex))
+                if (ContainsUnreservedFood(tileIndex))
                 {
                     return tile;
                 }
@@ -146,13 +151,13 @@ public class Person : Animal
         return null;
     }
 
-    private bool ContainsFood(int tileIndex)
+    private bool ContainsUnreservedFood(int tileIndex)
     {
         Tile tile = parentHexa.tiles[tileIndex];
 
         if (tile.inventory.ContainsKey("Food"))
         {
-            if (tile.inventory["Food"] > 0)
+            if (tile.inventory["Food"] - hexaLogistics.HowManyPendingPickups("Food", tileIndex) > 0)
             {
                 Debug.Log("Food source Tile: " + tile.index);
                 return true;
@@ -171,7 +176,7 @@ public class Person : Animal
 
     IEnumerator FollowWorkOrder(TileLogisticsRequest logisticsOrder)
     {
-
+        hexaLogistics.AddToPendingPickupArray(logisticsOrder.type, pickupQty, logisticsOrder.supplierIndex);
         Debug.Log("Work order began: " + logisticsOrder.type);
 
         int[] pathfindingTileIndexes = GeneratePathfindingTileIndices(parentHexa.tiles[logisticsOrder.supplierIndex]);
@@ -250,7 +255,9 @@ public class Person : Animal
 
     private void PickUpFromSupplier(Tile supplierTile, string type, int qty)
     {
-        supplierTile.PickUpReservedItem(type, qty);
+        //supplierTile.PickUpReservedItem(type, qty);
+        supplierTile.RemoveItem(type, qty);
+        hexaLogistics.RemoveFromPendingPickupArray(type, qty, supplierTile.index);
         AddToInventory(type, qty);
 
     }
