@@ -122,6 +122,11 @@ public class Animal : MonoBehaviour
         }
     }
 
+    protected bool isHungry()
+    {
+        return (hunger < seekFoodThreshold);
+    }
+
     protected bool AtLocation(Vector3 Vector3)
     {
         return (Vector3.Distance(transform.position, Vector3) <= reachedDestinationDistance);

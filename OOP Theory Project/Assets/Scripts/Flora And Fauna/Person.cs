@@ -207,16 +207,40 @@ public class Person : Animal
 
         while(alive)
         {
+            if (isHungry())
+            {
+                yield return StartCoroutine(FoodSeekBehavior());
+            }
+
             if (HasWorkOrder())
             {
                 Debug.Log("Work order started");
-                //mode = "Busy";
+                mode = "Busy";
                 yield return StartCoroutine(FulfillActiveWorkOrder());
                 mode = "Idle";
-                //activeWorkOrder = null;               //for some reason unloading the work order causes total stoppage
+                            
                 Debug.Log("Work Order Complete");
             }
             yield return new WaitForSeconds(logicFrequency);
+        }
+    }
+
+    IEnumerator FoodSeekBehavior()
+    {
+        while (isHungry())
+        {
+            Tile foodSourceTile = FindNearestFoodSource();
+
+            if (foodSourceTile != null)
+            {
+                hexaLogistics.AddToPendingPickupArray("Food", 1, foodSourceTile.index);
+
+                yield return StartCoroutine(MoveToTile(foodSourceTile.index));
+                EatFromTile(foodSourceTile);
+                hexaLogistics.RemoveFromPendingPickupArray("Food", 1, foodSourceTile.index);
+            }
+
+            yield return null;
         }
     }
 
