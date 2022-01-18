@@ -178,7 +178,7 @@ public class HexasphereLogistics : MonoBehaviour
 
         for (int i = 0; i < hexPop.populationList.Count; i++)
         {
-            Debug.Log("Checking worker " + i);
+            //Debug.Log("Checking worker " + i);
             GameObject person = hexPop.populationList[i];
             string mode = person.GetComponent<Person>().mode;
 
@@ -197,7 +197,7 @@ public class HexasphereLogistics : MonoBehaviour
         }
         else
         {
-            Debug.Log("No one found in range");
+            //Debug.Log("No one found in range");
             return null;
         }
     }

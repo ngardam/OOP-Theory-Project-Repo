@@ -18,6 +18,9 @@ public class AnimalManager : MonoBehaviour
         if (newAnimal.TryGetComponent<Person>(out Person person))
             {
             person.hexaLogistics = person.GetComponentInParent<HexasphereLogistics>();
+            HexaspherePopulation hexPop = hexa.GetComponentInParent<HexaspherePopulation>();
+            hexPop.AddToPopulationList(newAnimal);
+
         }
         return newAnimal;
 

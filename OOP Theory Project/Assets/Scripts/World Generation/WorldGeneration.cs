@@ -75,7 +75,7 @@ public class WorldGeneration : MonoBehaviour
         for (int i = 0; i < specs.numberOfStarterVillagers; i++)
         {
             GameObject newVillager = AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
-            hexPop.AddToPopulationList(newVillager);
+           // hexPop.AddToPopulationList(newVillager);
         }
 
 

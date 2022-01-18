@@ -7,6 +7,7 @@ public class EntityInfoPanel : MonoBehaviour
 {
     private GameObject targetEntity;
     private Text infoText;
+    private bool refreshRunning = false;
 
     private float refreshRate = 1.0f; //refresh rate in seconds
 
@@ -26,21 +27,25 @@ public class EntityInfoPanel : MonoBehaviour
     {
         targetEntity = go;
 
-        StartCoroutine(RefreshInfoText(targetEntity));
-
+        if (!refreshRunning)
+        {
+            StartCoroutine(RefreshInfoText());
+        }
         ConstructEntityInfoText(targetEntity);
 
 
     }
 
-    IEnumerator RefreshInfoText(GameObject entity)
+    IEnumerator RefreshInfoText()
     {
+        refreshRunning = true;
         while (targetEntity != null)
         {
-            string text = ConstructEntityInfoText(entity);
+            string text = ConstructEntityInfoText(targetEntity);
             infoText.text = text;
             yield return new WaitForSeconds(refreshRate);
         }
+        refreshRunning = false;
     }
 
     private string AnimalBios(Animal animal)
