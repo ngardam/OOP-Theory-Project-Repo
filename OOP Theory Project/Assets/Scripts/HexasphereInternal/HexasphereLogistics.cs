@@ -48,6 +48,7 @@ public class HexasphereLogistics : MonoBehaviour
             yield return new WaitForSeconds(logisticsRefreshRate);
             CleanUpList();
             IssueOrders();
+            //Debug.Log("Logistics step");
         }
     }
 
@@ -81,6 +82,7 @@ public class HexasphereLogistics : MonoBehaviour
                 int supplierIndex = FindNearestIndexOfResource(request.requesterIndex, request.type);
 
                 
+                
                 if (supplierIndex != -1)
                 {
                     GameObject nearestIdleWorker = FindNearestIdleWorker(supplierIndex);
@@ -91,14 +93,19 @@ public class HexasphereLogistics : MonoBehaviour
                         NewWorkOrder.supplierIndex = supplierIndex;
                         NewWorkOrder.requesterIndex = request.requesterIndex;
                         NewWorkOrder.type = request.type;
+                        NewWorkOrder.isComplete = false;
                         //NewWorkOrder.supplierIndex = supplierIndex;
                         NewWorkOrder.qty = pickupQty;
+
+                        Debug.Log("Worker found nearby");
 
                         //AddToPendingPickupArray(request.type, pickupQty, request.supplierIndex);
                         
 
                         request.active++;
-                        nearestIdleWorker.GetComponent<Person>().AssignWorkOrder(NewWorkOrder);  //hmmmm. what's going on here? Need to create new request so changing it doesn't affect active work orders
+                        Person person = nearestIdleWorker.GetComponent<Person>();
+                        //person.Interrupt();
+                        person.AssignWorkOrder(NewWorkOrder);  //hmmmm. what's going on here? Need to create new request so changing it doesn't affect active work orders
                     }
                 }
                 else
@@ -108,7 +115,7 @@ public class HexasphereLogistics : MonoBehaviour
             }
             else
             {
-                Debug.Log("All pending");
+               // Debug.Log("All pending");
             }
 
         }
@@ -158,6 +165,7 @@ public class HexasphereLogistics : MonoBehaviour
     {
         TileLogisticsRequest requestToUpdate = resourceRequests.Find(x => x.requesterIndex == tileIndex && x.type == type);
         requestToUpdate.active -= qty;
+        Debug.Log("New request: " + requestToUpdate.type + ": " + requestToUpdate.qty);
     }
 
     private GameObject FindNearestIdleWorker(int supplierIndex)
@@ -170,12 +178,13 @@ public class HexasphereLogistics : MonoBehaviour
 
         for (int i = 0; i < hexPop.populationList.Count; i++)
         {
+            Debug.Log("Checking worker " + i);
             GameObject person = hexPop.populationList[i];
-            bool hasTask = person.GetComponent<Person>().hasTask;
+            string mode = person.GetComponent<Person>().mode;
 
             float distance = Vector3.Distance(person.transform.position, supplierPos);
             
-            if (distance < smallestDistance && !hasTask)
+            if (distance < smallestDistance && mode == "Idle")
             {
                 smallestDistance = distance;
                 closestPersonIndex = i;
@@ -188,6 +197,7 @@ public class HexasphereLogistics : MonoBehaviour
         }
         else
         {
+            Debug.Log("No one found in range");
             return null;
         }
     }
