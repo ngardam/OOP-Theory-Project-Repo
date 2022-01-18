@@ -12,10 +12,12 @@ public class Residential : Building
         parentTile = _hexa.tiles[_tileIndex];
         tileIndex = _tileIndex;
         hexaLogistics = parentHexasphere.GetComponent<HexasphereLogistics>();
+        parentTile.inventoryChanged.AddListener(InventoryChanged);
         isActive = true;
 
+
         resourceRequests.Add("Food", foodRequestQty);
-        StartCoroutine(EmitLogisticsRequests());
+        EmitLogisticsRequests();
 
     }
 }

@@ -20,11 +20,12 @@ public abstract class Plant : MonoBehaviour
     public void SetParentTile(Tile tile)
     {
         parentTile = tile;
-        tile.itemRemoved.AddListener(ItemRemoved);
+        tile.inventoryChanged.AddListener(InventoryChanged);
         //Debug.Log("Parent tile set");
     }
 
-    protected abstract void ItemRemoved();
+    protected abstract void InventoryChanged();
+    
 
 
 }

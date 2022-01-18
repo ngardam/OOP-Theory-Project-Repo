@@ -34,7 +34,7 @@ public class WorldGeneration : MonoBehaviour
         specs.sandLevel = 0.45f;
         specs.grassLevel = 0.65f;
 
-        specs.numberOfStarterVillagers = 6;
+        specs.numberOfStarterVillagers = 2;
 
         specs.bottomTopLevel = new float[3]
         {
@@ -56,6 +56,7 @@ public class WorldGeneration : MonoBehaviour
         seedHexasphere.SetActive(false);
 
         Hexasphere hexa = newHexa.GetComponent<Hexasphere>();
+        HexaspherePopulation hexPop = newHexa.GetComponent<HexaspherePopulation>();
 
         newHexa.transform.localScale *= specs.scale;
         hexa.numDivisions = specs.divisions;
@@ -73,13 +74,16 @@ public class WorldGeneration : MonoBehaviour
 
         for (int i = 0; i < specs.numberOfStarterVillagers; i++)
         {
-            AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
+            GameObject newVillager = AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
+            hexPop.AddToPopulationList(newVillager);
         }
+
+
 
 
         CameraController cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
-        hexa.FlyTo(starterVillageTileIndex, 5f);
+        hexa.FlyTo(starterVillageTileIndex, 1f);
 
 
 

@@ -86,7 +86,7 @@ public class Berries : Plant
         }
     }
 
-    protected override void ItemRemoved()
+    protected override void InventoryChanged()
     {
         //Debug.Log("Item Removed Fired");
         int newQty = parentTile.inventory["Food"];

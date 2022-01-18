@@ -47,6 +47,8 @@ public class Classes : MonoBehaviour
         public int requesterIndex;
         public int priority = 0;
         public int active = 0; // number of requests actively being filled
+        public int supplierIndex;
+        public bool isComplete = true;
     }
 
 
