@@ -113,7 +113,7 @@ public class Person : Animal
 
     private int RandomNeighborIndex()
     {
-        int myTile = parentHexa.GetTileAtPos(gameObject.transform.position);
+        int myTile = MyTileIndex();
         int[] neighborIndexes = parentHexa.GetTileNeighbours(myTile);
         List<int> canCrossIndexes = new List<int>();
 
@@ -152,50 +152,7 @@ public class Person : Animal
 
     }
 
-   // IEnumerator GoToFoodAndEatFromTileInventory(Tile tile)
-   // {
-   //     hexaLogistics.AddToPendingPickupArray("Food", pickupQty, tile.index);
-   //     Debug.Log("Foodseek corouting started:");
-   //     int[] pathfindingTileIndexes = GeneratePathfindingTileIndices(tile);
-   //
-   //     isTraveling = true;
-   //     int step = 0;
-   //     int numberOfSteps = pathfindingTileIndexes.Length;
-   //     Vector3 destination;
-   //
-   //     while(isTraveling)
-   //     {
-   //         destination = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
-   //
-   //         StartCoroutine(GoToPosition(destination));
-   //
-   //         if (AtLocation(destination))
-   //         {
-   //             step++;
-   //
-   //             if (step == numberOfSteps)
-   //             {
-   //
-   //                 isTraveling = false;
-   //             }
-   //             else
-   //             {
-   //                 //destination = pathfindingSteps[step];
-   //             }
-   //         }
-   //
-   //         yield return null;
-   //
-   //     }
-   //
-   //
-   //     EatFromTile(tile);
-   //     hexaLogistics.RemoveFromPendingPickupArray("Food", pickupQty, tile.index);
-   //     Debug.Log("Yum");
-   //     TaskComplete();
-   //
-   //
-   // }
+
 
 
 
@@ -221,7 +178,39 @@ public class Person : Animal
                             
                 Debug.Log("Work Order Complete");
             }
+            else if (mode == "Idle")
+            {
+                string idleMode = RandomIdleMode();
+                yield return StartCoroutine(PerformIdleAction(idleMode));
+            }
             yield return new WaitForSeconds(logicFrequency);
+        }
+    }
+
+    IEnumerator PerformIdleAction(string idleMode)
+    {
+        //bool idleActionInProgress = true;
+
+        if (idleMode == "DoNothing")
+        {
+            yield return new WaitForSeconds(1f);
+
+        }
+        else if (idleMode == "FaceRandomTile")
+        {
+            FaceRandomNeighbor();
+            yield return new WaitForSeconds(1f);
+        }
+        else if (idleMode == "MoveToRandomNeighbor")
+        {
+            int neighborIndex = RandomNeighborIndex();
+            yield return StartCoroutine(MoveToTile(neighborIndex));
+            yield return new WaitForSeconds(1f);
+        }
+        else if (idleMode == "Ponder")
+        {
+            Debug.Log("Hmm..");
+            yield return new WaitForSeconds(1f);
         }
     }
 
@@ -249,6 +238,7 @@ public class Person : Animal
         
 
         yield return StartCoroutine(PickUpAtTile(activeWorkOrder.supplierIndex, activeWorkOrder.type, pickupQty));
+        //hexaLogistics.RemoveFromPendingPickupArray(activeWorkOrder.type, pickupQty, activeWorkOrder.supplierIndex);
         //pickup complete.. test if pick up complete
         if (!inventory.ContainsKey(activeWorkOrder.type))
         {
@@ -278,6 +268,7 @@ public class Person : Animal
     {
         yield return StartCoroutine(MoveToTile(tileIndex));
         PickUpFromSupplier(parentHexa.tiles[tileIndex], type, qty);
+        
     }
 
 
@@ -354,95 +345,11 @@ public class Person : Animal
         //StartCoroutine(FollowWorkOrder(resourceRequest));
     }
 
-   // IEnumerator FollowWorkOrder(TileLogisticsRequest logisticsOrder)
-   // {
-   //     hexaLogistics.AddToPendingPickupArray(logisticsOrder.type, pickupQty, logisticsOrder.supplierIndex);
-   //     Debug.Log("Work order began: " + logisticsOrder.type);
-   //
-   //     int[] pathfindingTileIndexes = GeneratePathfindingTileIndices(parentHexa.tiles[logisticsOrder.supplierIndex]);
-   //     int step = 0;
-   //     int numberOfSteps = pathfindingTileIndexes.Length;
-   //     Tile interactTile;
-   //     Vector3 destinationVector;
-   //     //StopCoroutine(GoToPosition);
-   //     isTraveling = true;
-   //
-   //     while (isTraveling)
-   //     {
-   //         destinationVector = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
-   //
-   //         StartCoroutine(GoToPosition(destinationVector));
-   //
-   //         if (AtLocation(destinationVector))
-   //         {
-   //             step++;
-   //
-   //             if (step == numberOfSteps)
-   //             {
-   //                 isTraveling = false;
-   //             }
-   //
-   //         }
-   //         yield return null;
-   //     }
-   //
-   //     // we have reached the supplier tile
-   //     interactTile = parentHexa.tiles[logisticsOrder.supplierIndex];
-   //
-   //     PickUpFromSupplier(interactTile, logisticsOrder.type, 1);       //People only grab 1 at a time.. if need to grab more, will need to compare carry capacity with requested qty
-   //
-   //     pathfindingTileIndexes = GeneratePathfindingTileIndices(parentHexa.tiles[logisticsOrder.requesterIndex]);
-   //     step = 0;
-   //     numberOfSteps = pathfindingTileIndexes.Length;
-   //     isTraveling = true;
-   //
-   //     while (isTraveling)
-   //     {
-   //         //TravelAlongPath(pathfindingTileIndexes);
-   //         destinationVector = parentHexa.GetTileCenter(pathfindingTileIndexes[step]);
-   //
-   //         StartCoroutine(GoToPosition(destinationVector));
-   //
-   //         if (AtLocation(destinationVector))
-   //         {
-   //             step++;
-   //
-   //             if (step == numberOfSteps)
-   //             {
-   //                 isTraveling = false;
-   //             }
-   //
-   //         }
-   //         yield return null;
-   //     }
-   //
-   //     //we have arrive at the requester tile
-   //
-   //     interactTile = parentHexa.tiles[logisticsOrder.requesterIndex];
-   //
-   //     DropOffAtRequester(interactTile, logisticsOrder.type, 1);
-   //
-   //     TaskComplete();
-   //
-   //
-   //
-   //
-   // }
 
-  //  private void TaskComplete()
-  //  {
-  //      hasTask = false;
-  //      StartCoroutine(IdleBehavior());
-  //  }
-
- //   private void TravelAlongPath(List<int> pathfindingTileIndexes)
- //   {
- //
- //   }
 
     private void PickUpFromSupplier(Tile supplierTile, string type, int qty)
     {
-        //supplierTile.PickUpReservedItem(type, qty);
+
         supplierTile.RemoveItem(type, qty);
         hexaLogistics.RemoveFromPendingPickupArray(type, qty, supplierTile.index);
         AddToInventory(type, qty);

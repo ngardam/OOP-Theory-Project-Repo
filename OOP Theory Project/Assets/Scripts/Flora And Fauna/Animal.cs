@@ -47,11 +47,17 @@ public class Animal : MonoBehaviour
     public Hexasphere parentHexa;
 
 
-    private void Awake()
+    private void Start()
     {
         StartCoroutine(metabolism());
         StartLogic();
         entityInfoPanel = GameObject.Find("Entity Info Panel").GetComponent<EntityInfoPanel>();
+        parentHexa = GetComponentInParent<Hexasphere>();
+    }
+
+    public void InitializeAnimal()
+    {
+        parentHexa = GetComponentInParent<Hexasphere>();
     }
 
     protected virtual void StartLogic()
@@ -63,7 +69,7 @@ public class Animal : MonoBehaviour
     protected int MyTileIndex()
     {
         int index = parentHexa.GetTileAtPos(transform.position);
-        Debug.Log("My Tile: " + index);
+        //Debug.Log("My Tile: " + index);
         return index;
     }
 
