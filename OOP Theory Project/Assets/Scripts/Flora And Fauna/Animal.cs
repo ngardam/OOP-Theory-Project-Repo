@@ -16,17 +16,19 @@ public class Animal : MonoBehaviour
 
     protected bool alive = true;
 
-    public int health { get; private set; } = 100;
+    private float decompositionTime = 10f;
+
+    public int health { get; private set; } = 20;
 
     public int hunger { get; private set; } = 60;
 
-    private int foodValue = 40;
+    private int foodValue = 15;
 
     public int sleep { get; private set; } = 100;
 
     private int maxStat = 100;
 
-    private float metabolismRate = 1.0f; //number of seconds to lower hunger by one
+    private float metabolismRate = 0.2f; //number of seconds to lower hunger by one
     private int seekFoodThreshold = 50;
 
     private float tirednessRate = 2.0f; //number of seconds to lower sleep by one
@@ -114,15 +116,7 @@ public class Animal : MonoBehaviour
             yield return null;
             //already arrived
         }
-        //  //int step = 0;
-        //  while (traveling)
-        //  {
-        //      destinationVector;
-        //
-        //
-        //      traveling = !AtLocation(destinationVector);
-        //      yield return null;
-        //  }
+
     }
 
     IEnumerator FollowPathfindingIndices(int[] tileIndexes)
@@ -208,9 +202,14 @@ public class Animal : MonoBehaviour
                 hunger = 0;
                 health--;
             }
-            else if (hunger >= 50 && health < maxStat)
+            else if (hunger >= 50 && health < maxStat)  // at above 50 hunger, health will regenerate
             {
                 health++;
+            }
+
+            if (health <= 0)
+            {
+                Die();
             }
         }
     }
@@ -229,5 +228,23 @@ public class Animal : MonoBehaviour
             entityInfoPanel.LoadEntity(gameObject);
             Debug.Log("Entity Clicked");
         }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Ack!");
+        alive = false;
+        parentHexa.GetComponent<HexaspherePopulation>().RemoveFromPopulationList(gameObject);
+        transform.Rotate(new Vector3(-90f, 0f, 0f), Space.Self);
+        StartCoroutine(Decompose());
+
+    }
+
+    IEnumerator Decompose()
+    {
+        yield return new WaitForSeconds(decompositionTime);
+
+        Destroy(gameObject);
+        
     }
 }

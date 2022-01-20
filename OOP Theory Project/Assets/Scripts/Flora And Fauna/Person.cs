@@ -9,7 +9,7 @@ using static Classes;
 public class Person : Animal
 {
 
-    //private TileLogisticsRequest activeLogisticsJob = new TileLogisticsRequest();
+
 
     private Dictionary<string, int> inventory = new Dictionary<string, int>();
 
@@ -26,72 +26,7 @@ public class Person : Animal
         StartCoroutine(PersonLogic());
     }
 
-  //  protected override void SeekFood()
-  //  {
-  //      if (!hasTask)
-  //      {
-  //          Tile foodSourceTile = FindNearestFoodSource();
-  //          if (foodSourceTile == null)
-  //          {
-  //              Debug.Log("Cannot find food");
-  //          }
-  //          else
-  //          {
-  //             // hexaLogistics.AddToPendingPickupArray("Food", pickupQty, foodSourceTile.index);
-  //              StartCoroutine(GoToFoodAndEatFromTileInventory(foodSourceTile));
-  //              hasTask = true;
-  //
-  //          }
-  //      }
-  //  }
 
-   // IEnumerator IdleBehavior()
-   // {
-   //     string idleMode = "null";
-   //     while (!hasTask)
-   //     {
-   //         yield return new WaitForSeconds(idleBehaviorFrequency);
-   //         if (idleMode == "null")
-   //         {
-   //             idleMode = RandomIdleMode();
-   //             yield return StartCoroutine(PerformIdleAction(idleMode));
-   //             Debug.Log("Idle Action Done");
-   //             idleMode = "null";
-   //         }
-   //     }
-   // }
-
-   // IEnumerator PerformIdleAction(string idleMode)
-   // {
-   //     //bool onGoing = true;
-   //     if (idleMode == "FaceRandomTile")
-   //     {
-   //         FaceRandomNeighbor();
-   //         //onGoing = false;
-   //     }
-   //     else if (idleMode == "MoveToRandomNeighbor")
-   //     {
-   //         Vector3 pos = RandomNeighborPos();
-   //         yield return StartCoroutine(GoToPosition(pos));
-   //         //onGoing = MoveToRandomNeighbor();  //new neighbor is being chosen every frame, obviously this is not ideal
-   //         //Debug.Log("Moving to random neighbor");
-   //     }
-   //
-   //     //return onGoing;
-   // }
-
-   // private bool MoveToRandomNeighbor()
-   // {
-   //     
-   //     int neighborIndex = RandomNeighborIndex();
-   //     Vector3 randomNeighborPos = parentHexa.GetTileCenter(neighborIndex);
-   //
-   //     MoveTowards(randomNeighborPos);
-   //
-   //     return !AtLocation(randomNeighborPos);
-   //
-   //     
-   // }
 
     private Vector3 RandomNeighborPos()
     {
@@ -189,7 +124,7 @@ public class Person : Animal
 
     IEnumerator PerformIdleAction(string idleMode)
     {
-        //bool idleActionInProgress = true;
+
 
         if (idleMode == "DoNothing")
         {
@@ -238,7 +173,7 @@ public class Person : Animal
         
 
         yield return StartCoroutine(PickUpAtTile(activeWorkOrder.supplierIndex, activeWorkOrder.type, pickupQty));
-        //hexaLogistics.RemoveFromPendingPickupArray(activeWorkOrder.type, pickupQty, activeWorkOrder.supplierIndex);
+        
         //pickup complete.. test if pick up complete
         if (!inventory.ContainsKey(activeWorkOrder.type))
         {

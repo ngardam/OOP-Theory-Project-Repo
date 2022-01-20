@@ -19,7 +19,7 @@ public class Berries : Plant
 
     private int maxRipeness= 100;
 
-    private float ripeningRate = 1f; //how long in seconds to gain one ripeness
+    private float ripeningRate = 3f; //how long in seconds to gain one ripeness
 
     // Start is called before the first frame update
     void Start()
