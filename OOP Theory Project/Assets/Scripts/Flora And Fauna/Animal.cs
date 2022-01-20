@@ -73,47 +73,7 @@ public class Animal : MonoBehaviour
         return index;
     }
 
-    //  protected void Update()
-    //  {
-    //
-    //  }
 
-
-
-    //  protected void MoveTowards(Vector3 destination)
-    //  {
-    //      transform.LookAt(destination, Vector3.back);
-    //      Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-    //
-    //      transform.position = newPos;
-    //
-    //  }
-
-    //  public void Interrupt()
-    //  {
-    //      interrupt = true;
-    //  }
-
-    //  protected IEnumerator GoToPosition(Vector3 destination)
-    //  {
-    //      hasTask = true;
-    //      interrupt = false;
-    //      Debug.Log("Move Action Began");
-    //      bool isTraveling = true;
-    //      transform.LookAt(destination, Vector3.back);
-    //      while (isTraveling && interrupt == false)
-    //      {
-    //          
-    //          Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-    //
-    //          transform.position = newPos;
-    //
-    //          isTraveling = !AtLocation(destination);
-    //          yield return null;
-    //      }
-    //      Debug.Log("Move Action Ended");
-    //      hasTask = false;
-    //  }
 
     protected void EatFromTile(Tile tile)
     {
