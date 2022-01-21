@@ -22,13 +22,13 @@ public class Animal : MonoBehaviour
 
     public int hunger { get; private set; } = 60;
 
-    private int foodValue = 15;
+    private int foodValue = 50;
 
     public int sleep { get; private set; } = 100;
 
     private int maxStat = 100;
 
-    private float metabolismRate = 0.2f; //number of seconds to lower hunger by one
+    private float metabolismRate = 1f; //number of seconds to lower hunger by one
     private int seekFoodThreshold = 50;
 
     private float tirednessRate = 2.0f; //number of seconds to lower sleep by one
@@ -234,7 +234,10 @@ public class Animal : MonoBehaviour
     {
         Debug.Log("Ack!");
         alive = false;
-        parentHexa.GetComponent<HexaspherePopulation>().RemoveFromPopulationList(gameObject);
+        if (GetComponent<Person>() != null)
+        {
+            parentHexa.GetComponent<HexaspherePopulation>().RemoveFromPopulationList(gameObject);
+        }
         transform.Rotate(new Vector3(-90f, 0f, 0f), Space.Self);
         StartCoroutine(Decompose());
 

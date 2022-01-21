@@ -10,7 +10,7 @@ public class Residential : Building
     private int reproductionThreshold = 7;
 
     private float reproductionTimer = 1f;
-    private float reproductionRate = 10f;
+    private float reproductionRate = 1f;
 
 
     public float reproductionProgress { get; private set;} = 0f;
@@ -58,8 +58,8 @@ public class Residential : Building
 
             if (reproductionProgress >= reproductionComplete)
             {
-                GameObject newVillager = AnimalManager.CreateAnimal(parentHexasphere, tileIndex, villagerPrefab);
-                //newVillager.i
+                AnimalManager.CreateAnimal(parentHexasphere, tileIndex, villagerPrefab);
+                
                 reproductionProgress = 0f;
             }
             yield return new WaitForSeconds(reproductionTimer);

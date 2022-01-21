@@ -27,7 +27,7 @@ public abstract class Building : MonoBehaviour
     protected void EmitLogisticsRequests()
     {
 
-        Debug.Log("Emitting");
+       // Debug.Log("Emitting");
         int qtyOnHand;
         int qtyWanted;
         int qtyRequested;

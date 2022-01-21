@@ -138,7 +138,7 @@ public class HexasphereLogistics : MonoBehaviour
             pendingPickupDict.Add(type, qty);
         }
 
-        Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
+        //Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
         
     }
 
@@ -151,7 +151,7 @@ public class HexasphereLogistics : MonoBehaviour
             selectedDict[type] -= qty;
         }
 
-        Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
+        //Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
         // Debug.Log("Pickup Complete: " + qty + type + " at tile " + supplierIndex);
     }
 
@@ -248,7 +248,7 @@ public class HexasphereLogistics : MonoBehaviour
             }
         }
 
-        Debug.Log("indexOfNearestResource not found");
+       // Debug.Log("indexOfNearestResource not found");
         return -1;
     }
 

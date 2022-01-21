@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     private bool loadingFromSave = false;
 
+    [SerializeField] GameObject researchPanel;
+
 
 
     Vector3 seedVector;
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
             GenerateNewGameWorld(seedVector);
             
         }
+
+        
     }
 
     // Update is called once per frame
@@ -44,6 +48,16 @@ public class GameManager : MonoBehaviour
         WorldGenSpecs specs = worldGen.GenerateRandomWorldGenSpecs();
 
         worldGen.GenerateWorld(specs);
+    }
+
+    public void ToggleResearchView()
+    {
+        researchPanel.SetActive(!researchPanel.activeSelf);
+
+        if (researchPanel.activeSelf)
+        {
+            researchPanel.GetComponent<ResearchView>().StartDisplay();
+        }
     }
 
 
