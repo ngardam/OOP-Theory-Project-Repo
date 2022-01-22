@@ -23,6 +23,8 @@ public class HexasphereLogistics : MonoBehaviour
 
     private int pickupQty = 1; //for now, only 1 item can be picked up at a time
 
+    
+
 
     public void InitializeHexasphereLogistics()
     {

@@ -34,7 +34,7 @@ public class WorldGeneration : MonoBehaviour
         specs.sandLevel = 0.45f;
         specs.grassLevel = 0.65f;
 
-        specs.numberOfStarterVillagers = 2;
+        specs.numberOfStarterVillagers = 3;
 
         specs.bottomTopLevel = new float[3]
         {

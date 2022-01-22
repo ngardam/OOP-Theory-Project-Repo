@@ -44,9 +44,11 @@ public class Animal : MonoBehaviour
 
     private float reachedDestinationDistance = 0.1f;
 
-    protected int searchLimit = 20; //how many steps distance animal will look for something
+    protected int searchLimit = 10; //how many steps distance animal will look for something
 
     public Hexasphere parentHexa;
+
+    
 
 
     private void Start()
@@ -250,4 +252,6 @@ public class Animal : MonoBehaviour
         Destroy(gameObject);
         
     }
+
+
 }

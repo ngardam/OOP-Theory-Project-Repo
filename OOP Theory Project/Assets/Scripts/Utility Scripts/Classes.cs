@@ -6,32 +6,32 @@ public class Classes : MonoBehaviour
 {
    public class WorldGenSpecs
     {
-        public Vector3 seedVector;
+        public Vector3 seedVector { get; set; }
 
-        public float scale;
+        public float scale { get; set; }
 
-        public int divisions;
+        public int divisions { get; set; }
 
-        public float terrainFrequency;
+        public float terrainFrequency { get; set; }
 
-        public Texture2D gradient;
+        public Texture2D gradient { get; set; }
 
-        public float forestThreshold;  //value between 0 and 1 above which forest will be generated in empty land
-        public float forestFrequency;
-        public float berryThreshold;
-        public float berryFrequency;
+        public float forestThreshold { get; set; }  //value between 0 and 1 above which forest will be generated in empty land
+        public float forestFrequency { get; set; }
+        public float berryThreshold { get; set; }
+        public float berryFrequency { get; set; }
 
-        public float waterLevel;
+        public float waterLevel { get; set; }
 
-        public float sandLevel;
+        public float sandLevel { get; set; }
 
-        public float grassLevel;
+        public float grassLevel { get; set; }
 
-        public float mountainLevel;
+        public float mountainLevel { get; set; }
 
-        public float[] bottomTopLevel = new float[3]; //heights between bottom[0] and top[1] will be set to level[2]
+        public float[] bottomTopLevel { get; set; } = new float[3]; //heights between bottom[0] and top[1] will be set to level[2]
 
-        public int numberOfStarterVillagers;
+        public int numberOfStarterVillagers { get; set; }
 
     }
 

@@ -31,12 +31,12 @@ public class Person : Animal
 
 
 
-    private Vector3 RandomNeighborPos()
-    {
-        int index = RandomNeighborIndex();
-        Vector3 pos = parentHexa.GetTileCenter(index);
-        return pos;
-    }
+  //  private Vector3 RandomNeighborPos()
+  //  {
+  //      int index = RandomNeighborIndex();
+  //      Vector3 pos = parentHexa.GetTileCenter(index);
+  //      return pos;
+  //  }
 
     
 
@@ -157,6 +157,7 @@ public class Person : Animal
     {
         while (isHungry())
         {
+            yield return new WaitForSeconds(Random.Range(0f, 2f));
             Tile foodSourceTile = FindNearestFoodSource();
 
             if (foodSourceTile != null)
@@ -168,7 +169,7 @@ public class Person : Animal
                 hexaLogistics.RemoveFromPendingPickupArray("Food", 1, foodSourceTile.index);
             }
 
-            yield return null;
+            yield return new WaitForSeconds(logicFrequency * 2f);
         }
     }
 
@@ -236,7 +237,7 @@ public class Person : Animal
 
             List<int> tileIndexList = parentHexa.GetTilesWithinSteps(myTileIndex, i, i);
 
-            Debug.Log("number of tiles with step " + i + ": " + tileIndexList.Count);
+            //Debug.Log("number of tiles with step " + i + ": " + tileIndexList.Count);
 
             foreach (int tileIndex in tileIndexList)
             {
