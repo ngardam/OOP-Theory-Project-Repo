@@ -20,7 +20,7 @@ public class Person : Animal
 
 
     private int pickupQty = 1; //pickup qty is always 1 right now
-    private int researchRate = 10; //How many research will be generated per research action
+    private int researchRate = 1; //How many research will be generated per research action
 
     protected override void StartLogic()
     {
@@ -148,7 +148,7 @@ public class Person : Animal
         else if (idleMode == "Ponder")
         {
             Debug.Log("Hmm..");
-            researchManager.AddResearch("Ponder", researchRate);
+            researchManager.AddToActiveResearch("Ponder", researchRate);
             yield return new WaitForSeconds(1f);
         }
     }

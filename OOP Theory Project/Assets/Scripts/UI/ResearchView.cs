@@ -9,7 +9,14 @@ public class ResearchView : MonoBehaviour
     private float refreshRate = 1f;
 
     private ResearchManager researchManager;
-    private Dictionary<string, int> researchInventory;
+    private Dictionary<string, Research> researchTracker;
+
+    [SerializeField] GameObject researchInfoPanel;
+
+    private string selectedResearch;
+
+    public Text infoTitleText;
+    [SerializeField] Text infoBodyText;
 
     ResearchIcon[] researchIcons;
 
@@ -31,7 +38,7 @@ public class ResearchView : MonoBehaviour
     {
         researchIcons = GameObject.FindObjectsOfType<ResearchIcon>();
         researchManager = GameObject.Find("Research Manager").GetComponent<ResearchManager>();
-        researchInventory = researchManager.researchPerformed;
+        researchTracker = researchManager.researchTracker;
         text = GetComponentInChildren<Text>();
         StartCoroutine(DisplayInfo());
 
@@ -41,33 +48,49 @@ public class ResearchView : MonoBehaviour
     {
         foreach(ResearchIcon icon in researchIcons)
         {
-            bool prereqsComplete = CheckPrerequisites(icon);
+            bool prereqsComplete = CheckPrerequisites(icon.researchName);
 
-            bool complete = icon.complete;
+            bool complete = researchTracker[icon.researchName].isComplete;
 
             Button iconButton = icon.gameObject.GetComponent<Button>();
 
-            iconButton.interactable = prereqsComplete && !complete;
+            iconButton.interactable = prereqsComplete && !complete  ;
         }
     }
 
-    private bool CheckPrerequisites(ResearchIcon icon)
+    private bool CheckPrerequisites(string researchName)
     {
         bool complete = true;
+        Debug.Log("Checking " + researchName);
+        Research research = researchTracker[researchName];
 
-        if (icon.prerequisites.Length > 0)
+        if (research.prerequisites.Length > 0)
         {
-            foreach (ResearchIcon _icon in researchIcons)
+            foreach (string prerequisite in research.prerequisites)
             {
-                foreach (string prereq in icon.prerequisites)
+                Debug.Log("Checking prereq: " + prerequisite);
+                if (researchTracker.ContainsKey(prerequisite))
                 {
-                    if (_icon.researchName == prereq)
-                    {
-                        complete &= _icon.complete;
-                    }
+                    complete &= researchTracker[prerequisite].isComplete;
+                }
+                else
+                {
+                    Debug.Log("Research " + prerequisite + " not found");
                 }
             }
         }
+
+        //    foreach (ResearchIcon _icon in researchIcons)
+        //    {
+        //        foreach (string prereq in icon.prerequisites)
+        //        {
+        //            if (_icon.researchName == prereq)
+        //            {
+        //                complete &= _icon.complete;
+        //            }
+        //        }
+        //    }
+      //  }
 
         return complete;
 
@@ -79,44 +102,86 @@ public class ResearchView : MonoBehaviour
         bool displaying = true;
         while (displaying)
         {
-            WriteDisplay();
+           // WriteDisplay();
             RefreshTiles();
+            DisplayResearchInfo(selectedResearch);
             yield return new WaitForSeconds(refreshRate);
         }
     }
 
-    private void WriteDisplay()
+//   private void WriteDisplay()
+//   {
+//       string newText = "";
+//
+//       foreach(KeyValuePair<string, int> entry in researchInventory)
+//       {
+//           newText += entry.Key + ": " + entry.Value + "\n";
+//       }
+//
+//       text.text = newText;
+//   }
+
+    public void ResearchIconClicked(string researchType)
     {
-        string newText = "";
-
-        foreach(KeyValuePair<string, int> entry in researchInventory)
+        if (infoTitleText.text == researchType && researchInfoPanel.activeSelf)
         {
-            newText += entry.Key + ": " + entry.Value + "\n";
+            researchInfoPanel.SetActive(false);
         }
-
-        text.text = newText;
+        else
+        {
+            selectedResearch = researchType;
+            DisplayResearchInfo(researchType);
+        }
     }
 
-    private void OnDrawGizmos()
+    private void DisplayResearchInfo(string researchType)
     {
-        ResearchIcon[] researchIcons = GameObject.FindObjectsOfType<ResearchIcon>();
-
-        foreach (ResearchIcon icon in researchIcons)
+        if (researchType != null)
         {
-            if (icon.prerequisites.Length > 0)
+            researchInfoPanel.SetActive(true);
+            infoTitleText.text = researchType;
+
+            infoBodyText.text = GenerateResearchInfo(researchType);
+        }
+    }
+
+    private string GenerateResearchInfo(string researchType)
+    {
+        string text = "No Entry Found";
+        if (ResearchTypes.ResearchDictionary.ContainsKey(researchType))
+        {
+            text = "Required for research: \n";
+
+            Research research = researchManager.researchTracker[researchType];
+
+            foreach (KeyValuePair<string, int> entry in research.RequiredForResearch)
             {
-                foreach (string prereq in icon.prerequisites)
-                {
-                    foreach (ResearchIcon _icon in researchIcons)
-                    {
-                        if (_icon.researchName == prereq)
-                        {
-                            Gizmos.DrawLine(icon.gameObject.transform.position, _icon.gameObject.transform.position);
-                        }
-                    }
-                }
+                text += research.completedResearch[entry.Key] + "/" + entry.Value + " " + entry.Key + "\n";
             }
         }
+        return text;
     }
+
+  //  private void OnDrawGizmos()
+  //  {
+  //      ResearchIcon[] researchIcons = GameObject.FindObjectsOfType<ResearchIcon>();
+  //
+  //      foreach (ResearchIcon icon in researchIcons)
+  //      {
+  //          if (icon.prerequisites.Length > 0)
+  //          {
+  //              foreach (string prereq in icon.prerequisites)
+  //              {
+  //                  foreach (ResearchIcon _icon in researchIcons)
+  //                  {
+  //                      if (_icon.researchName == prereq)
+  //                      {
+  //                          Gizmos.DrawLine(icon.gameObject.transform.position, _icon.gameObject.transform.position);
+  //                      }
+  //                  }
+  //              }
+  //          }
+  //      }
+  //  }
 }
 

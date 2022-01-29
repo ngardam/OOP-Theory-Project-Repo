@@ -6,20 +6,22 @@ using UnityEngine.UI;
 public class ResearchIcon : MonoBehaviour
 {
 
-    public string[] prerequisites;
+    //public string[] prerequisites;
 
     //[SerializeField] string[] unlocks { get; [SerializeField] set; }
 
     public string researchName;
 
-    public bool complete;
+    //public bool complete;
 
     public void ButtonClicked()
     {
-        complete = true;
+      //  complete = true;
 
         Button button = gameObject.GetComponent<Button>();
-        button.interactable = false;
+      //  button.interactable = false;
+
+
 
         ColorBlock colors = new ColorBlock();
         colors = button.colors;
@@ -27,7 +29,9 @@ public class ResearchIcon : MonoBehaviour
 
         button.colors = colors;
 
-        
+        ResearchView researchView = FindObjectOfType<ResearchView>();
+
+        researchView.ResearchIconClicked(researchName);
     }
 
 }
