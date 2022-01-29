@@ -217,7 +217,7 @@ public class ResearchManager : MonoBehaviour
         }
     }
 
-    private float ResearchCompleteRatio(string researchType)
+    public float ResearchCompleteRatio(string researchType)
     {
         float complete = 0f;
         int totalRequired = 0;

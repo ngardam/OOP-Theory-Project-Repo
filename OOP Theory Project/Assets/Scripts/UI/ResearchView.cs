@@ -55,6 +55,24 @@ public class ResearchView : MonoBehaviour
             Button iconButton = icon.gameObject.GetComponent<Button>();
 
             iconButton.interactable = prereqsComplete && !complete  ;
+
+            Slider slider = icon.slider;
+
+            float completeRatio = researchManager.ResearchCompleteRatio(icon.researchName);
+
+            if (completeRatio > 0 && completeRatio < 1)
+            {
+                slider.gameObject.SetActive(true);
+                slider.value = completeRatio;
+            }
+            else
+            {
+                if (slider.gameObject.activeSelf)
+                {
+                    Debug.Log("setting slider inactive " + icon.researchName);
+                    slider.gameObject.SetActive(false);
+                }
+            }
         }
     }
 

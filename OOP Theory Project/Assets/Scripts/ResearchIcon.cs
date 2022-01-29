@@ -12,8 +12,13 @@ public class ResearchIcon : MonoBehaviour
 
     public string researchName;
 
-    //public bool complete;
+    public Slider slider { get; private set; }
 
+    //public bool complete;
+    private void Awake()
+    {
+        slider = GetComponentInChildren<Slider>();
+    }
     public void ButtonClicked()
     {
       //  complete = true;
