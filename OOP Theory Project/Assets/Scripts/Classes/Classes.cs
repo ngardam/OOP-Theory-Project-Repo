@@ -37,7 +37,11 @@ public class Classes : MonoBehaviour
 
     public class BuildingType
     {
+<<<<<<< Updated upstream
 
+=======
+        public Dictionary<string, int> requiredToBuild { get; set; }
+>>>>>>> Stashed changes
     }
 
     public class TileLogisticsRequest
