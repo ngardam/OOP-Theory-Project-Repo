@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
-    - _ColorShift: 0.64484787
+    - _ColorShift: 0.51371
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -71,6 +71,6 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0, g: 0.25, b: 1, a: 0.8}
-    - _Color2: {r: 0.44313726, g: 0.4862745, b: 0.4392157, a: 1}
+    - _Color2: {r: 0.62352943, g: 0.61960787, b: 0.07450981, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
