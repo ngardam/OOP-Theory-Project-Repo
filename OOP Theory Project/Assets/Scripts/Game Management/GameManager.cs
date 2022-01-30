@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     private bool loadingFromSave = false;
 
     [SerializeField] GameObject researchPanel;
+    [SerializeField] GameObject buildMenuScrollView;
 
 
 
@@ -57,6 +58,19 @@ public class GameManager : MonoBehaviour
         if (researchPanel.activeSelf)
         {
             researchPanel.GetComponent<ResearchView>().StartDisplay();
+        }
+    }
+
+    public void ToggleBuildingMenu()
+    {
+        if (!buildMenuScrollView.activeSelf)
+        {
+            buildMenuScrollView.SetActive(true);
+            buildMenuScrollView.GetComponent<BuildingMenu>().CreateBuildingMenu();
+        }
+        else
+        {
+            buildMenuScrollView.SetActive(false);
         }
     }
 

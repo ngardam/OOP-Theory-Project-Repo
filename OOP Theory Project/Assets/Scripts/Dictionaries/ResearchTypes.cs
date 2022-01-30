@@ -111,8 +111,7 @@ public abstract class ResearchTypes
                     "Fire"
                 }
             }
-<<<<<<< Updated upstream
-=======
+
         },
         {
             "None Selected", new Research
@@ -120,7 +119,7 @@ public abstract class ResearchTypes
                 RequiredForResearch = new Dictionary<string, int>{ },
                 prerequisites = new string[0]
             }
->>>>>>> Stashed changes
+
         }
     };
     

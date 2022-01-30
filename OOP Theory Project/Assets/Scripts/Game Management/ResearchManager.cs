@@ -8,6 +8,7 @@ public class ResearchManager : MonoBehaviour
 
     [SerializeField] GameObject researchButtonPanel;
     [SerializeField] GameObject buildMenuButtonPanel;
+    [SerializeField] BuildingManager buildingManager;
 
 
 
@@ -29,10 +30,25 @@ public class ResearchManager : MonoBehaviour
     {
         researchTracker = BuildResearchTracker();
         selectedResearch = "Research Button";
-
+        
 
 
         StartCoroutine(ResearchStory());
+    }
+
+    private void ApplyResearchEffects(string researchName)
+    {
+        switch (researchName)
+        {
+            case "Village":
+                buildingManager.UnlockBuilding("Village");
+                break;
+            default:
+                Debug.Log("research not found");
+                break;
+
+        }
+
     }
 
     private Dictionary<string, Research> BuildResearchTracker()
@@ -67,7 +83,7 @@ public class ResearchManager : MonoBehaviour
     {
         if (researchTracker.ContainsKey(selectedResearch))
         {
-            if (researchTracker[selectedResearch].completedResearch.ContainsKey(researchType))
+            if (researchTracker[selectedResearch].RequiredForResearch.ContainsKey(researchType))
             {
                 int done = researchTracker[selectedResearch].completedResearch[researchType];
                 int needed = researchTracker[selectedResearch].RequiredForResearch[researchType];
@@ -78,9 +94,15 @@ public class ResearchManager : MonoBehaviour
                 else
                 {
                     done = needed;
-
+                    //this research is now complete
+                    
 
                     researchTracker[selectedResearch].isComplete = (IsResearchComplete(selectedResearch));
+                    ApplyResearchEffects(selectedResearch);
+
+                    selectedResearch = "None Selected";
+                    
+
                     
                 }
 
