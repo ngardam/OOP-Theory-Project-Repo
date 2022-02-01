@@ -11,7 +11,9 @@ public abstract class Building : MonoBehaviour
     protected HexasphereLogistics hexaLogistics;
     protected int tileIndex;
     protected Tile parentTile;
-    private float logisticsPulseFrequency = 1f; //time in seconds between logistics request attempts
+
+    protected Dictionary<string, int> inventory;
+    //private float logisticsPulseFrequency = 1f; //time in seconds between logistics request attempts
 
     protected Dictionary<string, int> resourceRequests = new Dictionary<string, int> { };
 
@@ -25,7 +27,7 @@ public abstract class Building : MonoBehaviour
     protected void EmitLogisticsRequests()
     {
 
-        Debug.Log("Emitting");
+       // Debug.Log("Emitting");
         int qtyOnHand;
         int qtyWanted;
         int qtyRequested;

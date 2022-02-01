@@ -16,17 +16,19 @@ public class Animal : MonoBehaviour
 
     protected bool alive = true;
 
-    public int health { get; private set; } = 100;
+    private float decompositionTime = 10f;
+
+    public int health { get; private set; } = 20;
 
     public int hunger { get; private set; } = 60;
 
-    private int foodValue = 40;
+    private int foodValue = 50;
 
     public int sleep { get; private set; } = 100;
 
     private int maxStat = 100;
 
-    private float metabolismRate = 1.0f; //number of seconds to lower hunger by one
+    private float metabolismRate = 1f; //number of seconds to lower hunger by one
     private int seekFoodThreshold = 50;
 
     private float tirednessRate = 2.0f; //number of seconds to lower sleep by one
@@ -42,16 +44,24 @@ public class Animal : MonoBehaviour
 
     private float reachedDestinationDistance = 0.1f;
 
-    protected int searchLimit = 20; //how many steps distance animal will look for something
+    protected int searchLimit = 10; //how many steps distance animal will look for something
 
     public Hexasphere parentHexa;
 
+    
 
-    private void Awake()
+
+    private void Start()
     {
         StartCoroutine(metabolism());
         StartLogic();
         entityInfoPanel = GameObject.Find("Entity Info Panel").GetComponent<EntityInfoPanel>();
+        parentHexa = GetComponentInParent<Hexasphere>();
+    }
+
+    public void InitializeAnimal()
+    {
+        parentHexa = GetComponentInParent<Hexasphere>();
     }
 
     protected virtual void StartLogic()
@@ -63,51 +73,11 @@ public class Animal : MonoBehaviour
     protected int MyTileIndex()
     {
         int index = parentHexa.GetTileAtPos(transform.position);
-        Debug.Log("My Tile: " + index);
+        //Debug.Log("My Tile: " + index);
         return index;
     }
 
-    //  protected void Update()
-    //  {
-    //
-    //  }
 
-
-
-    //  protected void MoveTowards(Vector3 destination)
-    //  {
-    //      transform.LookAt(destination, Vector3.back);
-    //      Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-    //
-    //      transform.position = newPos;
-    //
-    //  }
-
-    //  public void Interrupt()
-    //  {
-    //      interrupt = true;
-    //  }
-
-    //  protected IEnumerator GoToPosition(Vector3 destination)
-    //  {
-    //      hasTask = true;
-    //      interrupt = false;
-    //      Debug.Log("Move Action Began");
-    //      bool isTraveling = true;
-    //      transform.LookAt(destination, Vector3.back);
-    //      while (isTraveling && interrupt == false)
-    //      {
-    //          
-    //          Vector3 newPos = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-    //
-    //          transform.position = newPos;
-    //
-    //          isTraveling = !AtLocation(destination);
-    //          yield return null;
-    //      }
-    //      Debug.Log("Move Action Ended");
-    //      hasTask = false;
-    //  }
 
     protected void EatFromTile(Tile tile)
     {
@@ -120,6 +90,11 @@ public class Animal : MonoBehaviour
         {
             Debug.Log("error eating from tile");
         }
+    }
+
+    protected bool isHungry()
+    {
+        return (hunger < seekFoodThreshold);
     }
 
     protected bool AtLocation(Vector3 Vector3)
@@ -143,15 +118,7 @@ public class Animal : MonoBehaviour
             yield return null;
             //already arrived
         }
-        //  //int step = 0;
-        //  while (traveling)
-        //  {
-        //      destinationVector;
-        //
-        //
-        //      traveling = !AtLocation(destinationVector);
-        //      yield return null;
-        //  }
+
     }
 
     IEnumerator FollowPathfindingIndices(int[] tileIndexes)
@@ -237,9 +204,14 @@ public class Animal : MonoBehaviour
                 hunger = 0;
                 health--;
             }
-            else if (hunger >= 50 && health < maxStat)
+            else if (hunger >= 50 && health < maxStat)  // at above 50 hunger, health will regenerate
             {
                 health++;
+            }
+
+            if (health <= 0)
+            {
+                Die();
             }
         }
     }
@@ -259,4 +231,27 @@ public class Animal : MonoBehaviour
             Debug.Log("Entity Clicked");
         }
     }
+
+    private void Die()
+    {
+        Debug.Log("Ack!");
+        alive = false;
+        if (GetComponent<Person>() != null)
+        {
+            parentHexa.GetComponent<HexaspherePopulation>().RemoveFromPopulationList(gameObject);
+        }
+        transform.Rotate(new Vector3(-90f, 0f, 0f), Space.Self);
+        StartCoroutine(Decompose());
+
+    }
+
+    IEnumerator Decompose()
+    {
+        yield return new WaitForSeconds(decompositionTime);
+
+        Destroy(gameObject);
+        
+    }
+
+
 }

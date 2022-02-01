@@ -23,6 +23,8 @@ public class HexasphereLogistics : MonoBehaviour
 
     private int pickupQty = 1; //for now, only 1 item can be picked up at a time
 
+    
+
 
     public void InitializeHexasphereLogistics()
     {
@@ -105,7 +107,9 @@ public class HexasphereLogistics : MonoBehaviour
                         request.active++;
                         Person person = nearestIdleWorker.GetComponent<Person>();
                         //person.Interrupt();
-                        person.AssignWorkOrder(NewWorkOrder);  //hmmmm. what's going on here? Need to create new request so changing it doesn't affect active work orders
+                        person.AssignWorkOrder(NewWorkOrder);
+                        AddToPendingPickupArray(NewWorkOrder.type, NewWorkOrder.qty, NewWorkOrder.supplierIndex);
+
                     }
                 }
                 else
@@ -135,6 +139,8 @@ public class HexasphereLogistics : MonoBehaviour
         {
             pendingPickupDict.Add(type, qty);
         }
+
+        //Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
         
     }
 
@@ -146,6 +152,9 @@ public class HexasphereLogistics : MonoBehaviour
         {
             selectedDict[type] -= qty;
         }
+
+        //Debug.Log("Pending Pickup: " + pendingPickupArray[supplierIndex][type] + " " + type + " at tile " + supplierIndex);
+        // Debug.Log("Pickup Complete: " + qty + type + " at tile " + supplierIndex);
     }
 
     public int HowManyPendingPickups(string type, int tileIndex)
@@ -178,7 +187,7 @@ public class HexasphereLogistics : MonoBehaviour
 
         for (int i = 0; i < hexPop.populationList.Count; i++)
         {
-            Debug.Log("Checking worker " + i);
+            //Debug.Log("Checking worker " + i);
             GameObject person = hexPop.populationList[i];
             string mode = person.GetComponent<Person>().mode;
 
@@ -197,7 +206,7 @@ public class HexasphereLogistics : MonoBehaviour
         }
         else
         {
-            Debug.Log("No one found in range");
+            //Debug.Log("No one found in range");
             return null;
         }
     }
@@ -241,7 +250,7 @@ public class HexasphereLogistics : MonoBehaviour
             }
         }
 
-        Debug.Log("indexOfNearestResource not found");
+       // Debug.Log("indexOfNearestResource not found");
         return -1;
     }
 

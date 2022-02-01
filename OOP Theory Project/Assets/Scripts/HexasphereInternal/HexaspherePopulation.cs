@@ -10,4 +10,9 @@ public class HexaspherePopulation : MonoBehaviour
     {
         populationList.Add(person);
     }
+
+    public void RemoveFromPopulationList(GameObject personToRemove)
+    {
+        populationList.Remove(personToRemove);
+    }
 }

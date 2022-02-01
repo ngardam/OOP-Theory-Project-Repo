@@ -54,6 +54,10 @@ public class TileInfoPanel : MonoBehaviour
         {
             newText += "\n Ripeness: " + tile.gameObject.GetComponent<Berries>().ripeness;
         }
+        else if(tile.contents == "Village")
+        {
+            newText += "\n New Villager Progress: " + tile.gameObject.GetComponent<Residential>().reproductionProgress;
+        }
 
         newText += "\n\n";
 

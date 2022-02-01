@@ -34,7 +34,7 @@ public class WorldGeneration : MonoBehaviour
         specs.sandLevel = 0.45f;
         specs.grassLevel = 0.65f;
 
-        specs.numberOfStarterVillagers = 2;
+        specs.numberOfStarterVillagers = 7;
 
         specs.bottomTopLevel = new float[3]
         {
@@ -75,7 +75,7 @@ public class WorldGeneration : MonoBehaviour
         for (int i = 0; i < specs.numberOfStarterVillagers; i++)
         {
             GameObject newVillager = AnimalManager.CreateAnimal(hexa, starterVillageTileIndex, villagerPrefab);
-            hexPop.AddToPopulationList(newVillager);
+           // hexPop.AddToPopulationList(newVillager);
         }
 
 

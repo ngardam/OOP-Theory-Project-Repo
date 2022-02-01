@@ -19,7 +19,7 @@ public class Berries : Plant
 
     private int maxRipeness= 100;
 
-    private float ripeningRate = 1f; //how long in seconds to gain one ripeness
+    private float ripeningRate = 3f; //how long in seconds to gain one ripeness
 
     // Start is called before the first frame update
     void Start()
@@ -31,10 +31,10 @@ public class Berries : Plant
 
         DeactivateBerries();
 
-        StartCoroutine(ripen());
+        StartCoroutine(Ripen());
     }
 
-    IEnumerator ripen()
+    IEnumerator Ripen()
     {
         while(ripening && alive)
         {
@@ -101,6 +101,16 @@ public class Berries : Plant
             {
                 ripeBerries[i].SetActive(false);
             }
+        }
+
+        if (newQty == 0)
+        {
+            ripening = true;
+            StartCoroutine(Ripen());
+        }
+        else if (newQty < 0)
+        {
+            Debug.Log("Error: negative berries");
         }
     }
 }
