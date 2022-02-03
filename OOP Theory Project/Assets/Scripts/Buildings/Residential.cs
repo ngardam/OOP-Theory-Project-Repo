@@ -35,6 +35,7 @@ public class Residential : Building
         StartCoroutine(ResidentialBehavior());
 
         resourceRequests.Add("Food", foodRequestQty);
+        resourceRequests.Add("Wood", 25);
         EmitLogisticsRequests();
 
     }

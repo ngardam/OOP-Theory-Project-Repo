@@ -29,8 +29,14 @@ public class Berries : Plant
 
 
 
-        DeactivateBerries();
+        //DeactivateBerries();
 
+        //StartCoroutine(Ripen());
+    }
+
+    public override void InitializePlant()
+    {
+        DeactivateBerries();
         StartCoroutine(Ripen());
     }
 
@@ -50,11 +56,6 @@ public class Berries : Plant
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void SetRipeness(int _ripeness)
     {

@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject researchPanel;
     [SerializeField] GameObject buildMenuScrollView;
 
-
+    public GameObject targetHexasphere;
 
     Vector3 seedVector;
 
@@ -31,10 +31,9 @@ public class GameManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetTargetHexasphere(GameObject hexasphereObject)
     {
-        
+        targetHexasphere = hexasphereObject;
     }
 
     private void LoadSaveData()
@@ -71,8 +70,16 @@ public class GameManager : MonoBehaviour
         else
         {
             buildMenuScrollView.SetActive(false);
+            targetHexasphere.GetComponent<HexsphereInteraction>().StopPlaceBuildingMode();
         }
     }
 
+    public void BuildButtonClicked(string buildingType)
+    {
+        GameObject previewPrefab = GetComponentInChildren<BuildingPrefabs>().GetPrefab(buildingType);
 
+        HexsphereInteraction hexInteraction = targetHexasphere.GetComponent<HexsphereInteraction>();
+
+        hexInteraction.StartPlaceBuildingMode(previewPrefab);
+    }
 }

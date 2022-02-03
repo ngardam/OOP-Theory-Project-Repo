@@ -83,6 +83,10 @@ public class WorldGeneration : MonoBehaviour
 
         CameraController cameraController = GameObject.Find("Main Camera").GetComponent<CameraController>();
 
+        GameManager gameManager = FindObjectOfType<GameManager>();
+
+        gameManager.SetTargetHexasphere(newHexa);
+
         hexa.FlyTo(starterVillageTileIndex, 1f);
 
 

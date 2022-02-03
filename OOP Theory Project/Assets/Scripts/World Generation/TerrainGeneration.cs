@@ -37,6 +37,8 @@ public class TerrainGeneration : MonoBehaviour
 
             SetTerrainTagByHeight(tile, specs);
 
+            //tile.contents = "None";
+
 
 
         }

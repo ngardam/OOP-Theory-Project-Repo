@@ -176,11 +176,21 @@ public class Animal : MonoBehaviour
 
             List<int> tileIndicesList = parentHexa.FindPath(MyTileIndex(), destinationTile.index);
 
-            int[] indexArray = new int[tileIndicesList.Count];
+            int[] indexArray;
 
-            for (int i = 0; i < indexArray.Length; i++)
+            if (tileIndicesList != null)
             {
-                indexArray[i] = tileIndicesList[i];
+                indexArray = new int[tileIndicesList.Count];
+
+                for (int i = 0; i < indexArray.Length; i++)
+                {
+                    indexArray[i] = tileIndicesList[i];
+                }
+            }
+            else
+            {
+                Debug.Log("No Path Found");
+                indexArray = new int[1] { MyTileIndex() };
             }
 
             return indexArray;

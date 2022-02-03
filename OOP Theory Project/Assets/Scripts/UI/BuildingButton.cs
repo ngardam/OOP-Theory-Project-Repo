@@ -5,7 +5,19 @@ using UnityEngine.UI;
 
 public class BuildingButton : MonoBehaviour
 {
+
+
     public Text buttonText;
 
     public Text infoText;
+
+
+    public void Clicked()
+    {
+        GameManager gameManager = FindObjectOfType<GameManager>();
+
+        string buildingType = buttonText.text;
+
+        gameManager.BuildButtonClicked(buildingType);
+    }
 }

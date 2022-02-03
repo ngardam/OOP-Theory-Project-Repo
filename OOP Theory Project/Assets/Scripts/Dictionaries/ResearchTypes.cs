@@ -13,7 +13,7 @@ public abstract class ResearchTypes
             {
                 RequiredForResearch = new Dictionary<string, int>
                 {
-                    { "Ponder", 20 }
+                    { "Ponder", 8 }
                 },
                 prerequisites = new string[1]
                 {
@@ -39,7 +39,7 @@ public abstract class ResearchTypes
             {
                 RequiredForResearch = new Dictionary<string, int>
                 {
-                    {"Ponder", 8 }
+                    {"Ponder", 5 }
                 },
                 prerequisites = new string[]
                 {

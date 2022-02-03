@@ -25,7 +25,7 @@ public abstract class Plant : MonoBehaviour
     }
 
     protected abstract void InventoryChanged();
-    
 
+    public abstract void InitializePlant();
 
 }

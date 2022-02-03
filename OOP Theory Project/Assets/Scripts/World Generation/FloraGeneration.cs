@@ -49,6 +49,8 @@ public class FloraGeneration : MonoBehaviour
                 {
                     GameObject randomPrefab = forestPrefabs[Random.Range(0, forestPrefabs.Length)];
                     GameObject newForest = PropPlacement.CreateProp(hexa, tile.index, randomPrefab);
+                    newForest.GetComponent<Forest>().SetParentTile(tile);
+                    newForest.GetComponent<Forest>().InitializePlant();
                     //hexa.SetTileTag(tile.index, "Forest");
                     tile.gameObject = newForest;
                     tile.contents = "Forest";
@@ -88,6 +90,7 @@ public class FloraGeneration : MonoBehaviour
                     tile.gameObject = myProp;
                     tile.contents = "Berries";
                     myProp.GetComponent<Berries>().SetRipeness(Random.Range(1, 150));
+                    myProp.GetComponent<Berries>().InitializePlant();
 
                 }
             }
